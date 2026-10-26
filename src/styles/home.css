@@ -849,6 +849,10 @@ p {
     display: none;
   }
 
+  .header-auth-link {
+    display: none;
+  }
+
   .header-actions {
     gap: 0.35rem;
   }
@@ -965,6 +969,10 @@ p {
 
   .hero h1 {
     font-size: 2.8rem;
+  }
+
+  .header-signup-link {
+    display: none;
   }
 
   .hero-actions {

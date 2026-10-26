@@ -1,82 +1,15 @@
-import { useEffect, useState } from "react";
-import ThemeToggle from "../components/ThemeToggle";
-import { translate } from "../i18n/messages";
+import SiteHeader from "../components/SiteHeader";
+import { AppLink } from "../routing/Router";
 import "../styles/home.css";
-import type { Locale } from "../types/theme";
-import { getInitialTheme, saveTheme } from "../utils/theme";
+import type { AppPageProps } from "../types/app";
 
-function HomePage() {
-  const [theme, setTheme] = useState(getInitialTheme);
-  const [locale, setLocale] = useState<Locale>("fr");
-  const t = (key: Parameters<typeof translate>[1]) => translate(locale, key);
-
-  useEffect(() => {
-    document.documentElement.lang = locale;
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", theme === "light" ? "#f8f7ff" : "#15141f");
-  }, [locale, theme]);
-
-  function toggleTheme() {
-    const nextTheme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-    saveTheme(nextTheme);
-  }
-
+function HomePage({ t, ...pageProps }: AppPageProps) {
   return (
-    <div className="site-shell" data-theme={theme}>
+    <div className="site-shell" data-theme={pageProps.theme}>
       <a className="skip-link" href="#main-content">
         {t("skipLink")}
       </a>
-
-      <header className="site-header">
-        <a aria-label="TalkChat — accueil" className="brand" href="#home">
-          <span aria-hidden="true" className="brand-mark">
-            <svg fill="none" viewBox="0 0 28 28">
-              <path
-                d="M5 8.25A3.25 3.25 0 0 1 8.25 5h11.5A3.25 3.25 0 0 1 23 8.25v7.5A3.25 3.25 0 0 1 19.75 19H13l-5 4v-4h-.75A3.25 3.25 0 0 1 4 15.75v-7.5A3.25 3.25 0 0 1 7.25 5Z"
-                fill="currentColor"
-              />
-              <circle cx="10" cy="12" r="1" fill="var(--bubble-dot)" />
-              <circle cx="14" cy="12" r="1" fill="var(--bubble-dot)" />
-              <circle cx="18" cy="12" r="1" fill="var(--bubble-dot)" />
-            </svg>
-          </span>
-          <span className="brand-name">TalkChat</span>
-        </a>
-
-        <nav aria-label={t("home")} className="main-nav">
-          <a className="nav-link active" href="#home">
-            {t("home")}
-          </a>
-          <a className="nav-link" href="#features">
-            {t("features")}
-          </a>
-          <a className="nav-link" href="#about">
-            {t("about")}
-          </a>
-        </nav>
-
-        <div className="header-actions">
-          <label className="visually-hidden" htmlFor="language-select">
-            {t("language")}
-          </label>
-          <select
-            className="language-select"
-            id="language-select"
-            onChange={(event) => setLocale(event.target.value as Locale)}
-            value={locale}
-          >
-            <option value="fr">FR</option>
-            <option value="en">EN</option>
-          </select>
-          <ThemeToggle
-            label={theme === "light" ? t("themeDark") : t("themeLight")}
-            onToggle={toggleTheme}
-            theme={theme}
-          />
-        </div>
-      </header>
+      <SiteHeader {...pageProps} t={t} />
 
       <main id="main-content">
         <section aria-labelledby="hero-title" className="hero" id="home">
@@ -85,7 +18,7 @@ function HomePage() {
               <span aria-hidden="true" className="eyebrow-dot" />
               {t("eyebrow")}
             </p>
-            <h1 id="hero-title">
+            <h1 id="hero-title" tabIndex={-1}>
               {t("headlineStart")}
               <br />
               <span>{t("headlineAccent")}</span>
@@ -218,7 +151,7 @@ function HomePage() {
             </div>
             <div aria-hidden="true" className="floating-badge">
               <span className="badge-sparkle">✦</span>
-              <span>Un petit mot, beaucoup de lien.</span>
+              <span>{t("floatingMessage")}</span>
             </div>
           </div>
         </section>
@@ -308,10 +241,10 @@ function HomePage() {
       </main>
 
       <footer className="site-footer">
-        <a
-          aria-label="TalkChat — accueil"
+        <AppLink
+          aria-label={t("brandHome")}
           className="brand footer-brand"
-          href="#home"
+          to="/"
         >
           <span aria-hidden="true" className="brand-mark">
             <svg fill="none" viewBox="0 0 28 28">
@@ -325,7 +258,7 @@ function HomePage() {
             </svg>
           </span>
           <span className="brand-name">TalkChat</span>
-        </a>
+        </AppLink>
         <p>{t("footer")}</p>
         <span className="footer-status">
           <i />
