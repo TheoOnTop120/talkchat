@@ -1,4 +1,5 @@
 import SiteHeader from "../components/SiteHeader";
+import LegalFooterLinks from "../components/LegalFooterLinks";
 import { AppLink } from "../routing/Router";
 import "../styles/home.css";
 import type { AppPageProps } from "../types/app";
@@ -264,6 +265,7 @@ function HomePage({ t, ...pageProps }: AppPageProps) {
           <i />
           {t("footerStatus")}
         </span>
+        <LegalFooterLinks t={t} />
       </footer>
     </div>
   );

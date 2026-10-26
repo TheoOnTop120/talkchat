@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import HomePage from "./pages/HomePage";
+import LegalPage from "./pages/LegalPage";
 import LoginPage from "./pages/LoginPage";
 import ProblemPage from "./pages/ProblemPage";
 import RecoveryPage from "./pages/RecoveryPage";
@@ -57,13 +58,21 @@ function RoutedApp() {
       return <RecoveryPage {...pageProps} />;
     case "/verify-email":
       return <VerificationPage {...pageProps} />;
+    case "/legal/terms":
+      return <LegalPage {...pageProps} documentId="terms" />;
+    case "/legal/privacy":
+      return <LegalPage {...pageProps} documentId="privacy" />;
+    case "/legal/community":
+      return <LegalPage {...pageProps} documentId="community" />;
+    case "/legal/report":
+      return <LegalPage {...pageProps} documentId="report" />;
+    case "/legal/security":
+      return <LegalPage {...pageProps} documentId="security" />;
     case "/error":
       return <ProblemPage {...pageProps} kind="error" pathname={pathname} />;
     case "/access-denied":
       return <ProblemPage {...pageProps} kind="access" pathname={pathname} />;
     case "/unavailable":
-    case "/legal/terms":
-    case "/legal/privacy":
       return (
         <ProblemPage
           {...pageProps}

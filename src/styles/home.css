@@ -634,6 +634,11 @@ p {
   border-top: 1px solid var(--line);
 }
 
+.site-footer .legal-footer-links {
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
 .section-kicker {
   color: var(--muted);
   font-size: 0.68rem;

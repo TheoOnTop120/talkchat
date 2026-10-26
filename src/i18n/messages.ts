@@ -6,6 +6,10 @@ export const messages = {
     home: "Accueil",
     features: "Fonctionnalités",
     about: "À propos",
+    legalNavigation: "Informations légales",
+    communityLink: "Règles de la communauté",
+    reportLink: "Signaler un contenu",
+    securityLink: "Sécurité",
     primaryNavigation: "Navigation principale",
     brandHome: "TalkChat — accueil",
     pageTitle: "TalkChat — Les conversations qui rapprochent",
@@ -71,6 +75,8 @@ export const messages = {
     termsAnd: "et la",
     privacyLink: "politique de confidentialité",
     termsSuffix: ".",
+    legalDraftSignupNote:
+      "Ces textes sont des brouillons. Cette démonstration n’enregistre pas votre acceptation.",
     signupSubmit: "Créer mon compte",
     signupLoading: "Simulation en cours…",
     signupDemoNotice:
@@ -144,6 +150,10 @@ export const messages = {
     home: "Home",
     features: "Features",
     about: "About",
+    legalNavigation: "Legal information",
+    communityLink: "Community guidelines",
+    reportLink: "Report content",
+    securityLink: "Security",
     primaryNavigation: "Primary navigation",
     brandHome: "TalkChat — home",
     pageTitle: "TalkChat — Conversations that bring us closer",
@@ -208,6 +218,8 @@ export const messages = {
     termsAnd: "and",
     privacyLink: "Privacy Policy",
     termsSuffix: ".",
+    legalDraftSignupNote:
+      "These texts are drafts. This demo does not record your acceptance.",
     signupSubmit: "Create my account",
     signupLoading: "Demo in progress…",
     signupDemoNotice:

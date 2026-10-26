@@ -248,6 +248,7 @@ function RegisterPage(props: AppPageProps) {
               {props.t(errors.accepted)}
             </p>
           )}
+          <p className="field-hint">{props.t("legalDraftSignupNote")}</p>
         </div>
         <button
           aria-busy={loading}

@@ -55,7 +55,11 @@ The frontend currently includes these client-side routes:
 - `/access-denied`
 - `/unavailable`
 - `/not-found`
-- `/legal/terms` and `/legal/privacy` (unavailable placeholders)
+- `/legal/terms`
+- `/legal/privacy`
+- `/legal/community`
+- `/legal/report`
+- `/legal/security`
 
 Unknown paths show the not-found page. The forms validate fields and simulate a
 short loading state, but do not create accounts or sessions, send email, or
@@ -66,8 +70,12 @@ resend is only simulated.
 
 The `/error`, `/access-denied`, and `/unavailable` pages are presentational
 states for future flows; no real authorization or server errors are handled.
-Terms and privacy links currently lead to the unavailable page because no legal
-documents have been provided.
+The five `/legal/*` pages contain bilingual working drafts and prototype
+information, not reviewed legal terms or a compliance guarantee. They do not
+identify an operator or invent contact details. Actual collection purposes,
+legal bases, recipients, retention periods, and applicable rights remain to be
+defined and reviewed before any public launch. There is no working report
+submission channel or implemented moderation system.
 
 Navigation uses the browser History API directly, so no routing dependency is
 required. Language choices apply immediately across the current client-side
