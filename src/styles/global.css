@@ -1,0 +1,99 @@
+:root {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  color: #28263a;
+  background: #f8f7ff;
+
+  --page: #f8f7ff;
+  --surface: #fff;
+  --surface-soft: #f3f1ff;
+  --text: #28263a;
+  --muted: #77758d;
+  --muted-strong: #59576e;
+  --line: #eae8f3;
+  --accent: #635bdb;
+  --accent-strong: #5148c6;
+  --accent-soft: #eeecff;
+  --accent-tint: #e5e1ff;
+  --shadow: 0 22px 70px rgb(54 44 116 / 12%);
+  --small-shadow: 0 8px 28px rgb(54 44 116 / 8%);
+  --bubble-dot: #fff;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body,
+button,
+select {
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+select {
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+button:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 3px solid #a39df5;
+  outline-offset: 3px;
+}
+
+::selection {
+  color: #fff;
+  background: #635bdb;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

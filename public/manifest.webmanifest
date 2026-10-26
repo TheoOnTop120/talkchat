@@ -1,0 +1,19 @@
+{
+  "name": "TalkChat",
+  "short_name": "TalkChat",
+  "description": "Les conversations qui rapprochent.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f7ff",
+  "theme_color": "#f8f7ff",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
