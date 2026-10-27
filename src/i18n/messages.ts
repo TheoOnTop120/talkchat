@@ -49,9 +49,46 @@ export const messages = {
     hidePassword: "Masquer le mot de passe",
     forgotLink: "Mot de passe oublié ?",
     loginSubmit: "Se connecter",
-    loginLoading: "Simulation en cours…",
-    loginDemoNotice:
-      "Maquette uniquement : aucune connexion n’a été effectuée et aucune donnée n’a été envoyée.",
+    loginLoading: "Connexion…",
+    signOut: "Se déconnecter",
+    authConfigurationMissing:
+      "L’authentification n’est pas configurée. Renseignez l’URL Supabase et la clé publique du projet dans la configuration locale.",
+    authConfigurationInvalid:
+      "La configuration Supabase est invalide. Vérifiez l’URL publique du projet.",
+    authOperationError:
+      "L’opération n’a pas abouti. Réessayez dans quelques instants.",
+    authNetworkError:
+      "Le service d’authentification est momentanément inaccessible. Vérifiez votre connexion puis réessayez.",
+    authCredentialsError: "Adresse e-mail ou mot de passe incorrect.",
+    authLinkInvalid:
+      "Ce lien est invalide ou a expiré. Demandez un nouveau lien puis réessayez.",
+    authPasswordRejected:
+      "Le service a refusé ce mot de passe. Choisissez-en un autre conforme aux exigences.",
+    authCheckingSession: "Vérification de votre session…",
+    authSessionRestoreError:
+      "La session n’a pas pu être vérifiée. Rechargez la page ou réessayez.",
+    authRecoveryAccepted:
+      "Si cette adresse correspond à un compte et si l’envoi e-mail est configuré, un lien de réinitialisation pourra être reçu.",
+    authEmailVerified: "Votre adresse e-mail est confirmée.",
+    authAccountReady:
+      "Votre compte est prêt. Vous pouvez commencer à utiliser TalkChat.",
+    authVerifyPending:
+      "La demande a été acceptée. Si la confirmation e-mail est activée, consultez votre boîte de réception. L’envoi dépend de la configuration e-mail du projet Supabase.",
+    authResetPasswordTitle: "Choisissez un nouveau mot de passe",
+    authResetPasswordIntro:
+      "Saisissez et confirmez un nouveau mot de passe pour votre compte.",
+    authResetPasswordSubmit: "Enregistrer le mot de passe",
+    authResetPasswordLoading: "Enregistrement…",
+    authPasswordUpdated: "Votre mot de passe a été mis à jour.",
+    authResetLinkRequired:
+      "Aucun lien de réinitialisation valide n’est actif. Demandez un nouveau lien.",
+    authResendEmail: "Adresse e-mail",
+    authResendConfirmation: "Renvoyer le lien de confirmation",
+    authResendLoading: "Envoi de la demande…",
+    authEmailLinkRequested:
+      "La demande a été traitée. Si l’envoi e-mail est configuré, vérifiez votre boîte de réception.",
+    authInvalidCallback:
+      "Le lien de confirmation est invalide ou a expiré. Vous pouvez demander un nouveau lien.",
     noAccount: "Pas encore de compte ?",
     registerLink: "Créer un compte",
     registerTitle: "Rejoignez TalkChat",
@@ -61,7 +98,7 @@ export const messages = {
     displayNamePlaceholder: "Comment souhaitez-vous apparaître ?",
     birthDateLabel: "Date de naissance",
     birthDateHint:
-      "Obligatoire pour vérifier l’âge minimum de 13 ans. Cette maquette ne conserve pas cette information.",
+      "Utilisée uniquement pour vérifier l’âge minimum de 13 ans dans le navigateur ; elle n’est pas envoyée à Supabase.",
     passwordConfirmLabel: "Confirmer le mot de passe",
     passwordConfirmPlaceholder: "Saisissez à nouveau votre mot de passe",
     passwordRulesTitle: "Votre mot de passe doit contenir :",
@@ -76,35 +113,20 @@ export const messages = {
     privacyLink: "politique de confidentialité",
     termsSuffix: ".",
     legalDraftSignupNote:
-      "Ces textes sont des brouillons. Cette démonstration n’enregistre pas votre acceptation.",
+      "Ces textes sont des brouillons. Votre acceptation n’est pas transmise avec la demande de compte.",
     signupSubmit: "Créer mon compte",
-    signupLoading: "Simulation en cours…",
-    signupDemoNotice:
-      "Maquette uniquement : aucun compte n’a été créé et aucune donnée n’a été envoyée ou enregistrée.",
+    signupLoading: "Création du compte…",
     haveAccount: "Vous avez déjà un compte ?",
     loginLink: "Se connecter",
     forgotTitle: "Réinitialiser le mot de passe",
     forgotIntro:
-      "Saisissez votre adresse e-mail pour continuer. Cette maquette n’envoie aucun message.",
+      "Saisissez l’adresse e-mail associée à votre compte. La réception du lien dépend de la configuration e-mail du projet.",
     resetSubmit: "Continuer",
     resetLoading: "Préparation…",
-    resetConfirmTitle: "Étape de démonstration",
-    resetConfirmBody:
-      "Si cette fonctionnalité était connectée, la réponse resterait la même que l’adresse corresponde ou non à un compte.",
-    resetNoSend:
-      "Aucun e-mail n’a été envoyé : cette maquette n’est reliée à aucun service.",
     returnLogin: "Retour à la connexion",
     verifyTitle: "Vérifiez votre adresse e-mail",
     verifyIntro:
-      "Dans la version complète de TalkChat, un message de vérification sera envoyé après la création d’un compte.",
-    verifyDemoNotice:
-      "Maquette uniquement : aucun compte n’a été créé et aucun e-mail n’a été envoyé.",
-    verifyNoAddress:
-      "Cette démonstration n’utilise ni ne conserve l’adresse saisie précédemment.",
-    verifyResend: "Simuler un renvoi",
-    verifyLoading: "Simulation en cours…",
-    verifyNoSend:
-      "Aucun e-mail n’a été envoyé. La vérification n’est pas encore reliée à un service réel.",
+      "Suivez le lien de confirmation reçu ou demandez-en un nouveau. La livraison dépend de la configuration e-mail du projet Supabase.",
     verifyBack: "Retour à la création de compte",
     errorRequired: "Ce champ est obligatoire.",
     errorInvalidEmail: "Saisissez une adresse e-mail valide.",
@@ -128,7 +150,7 @@ export const messages = {
       "La page n’a pas pu être affichée. Vous pouvez revenir à l’accueil ou réessayer.",
     accessDeniedTitle: "Accès refusé",
     accessDeniedBody:
-      "Vous n’avez pas accès à cette page. Aucune session ou authentification n’est active dans cette maquette.",
+      "Vous n’avez pas accès à cette page. Une session authentifiée est nécessaire.",
     notFoundTitle: "Cette page est introuvable",
     notFoundBody:
       "Le lien est peut-être incorrect ou la page a été déplacée.",
@@ -193,9 +215,45 @@ export const messages = {
     hidePassword: "Hide password",
     forgotLink: "Forgot password?",
     loginSubmit: "Sign in",
-    loginLoading: "Demo in progress…",
-    loginDemoNotice:
-      "Demo only: no sign-in took place and no data was sent.",
+    loginLoading: "Signing in…",
+    signOut: "Sign out",
+    authConfigurationMissing:
+      "Authentication is not configured. Set the Supabase project URL and public key in the local configuration.",
+    authConfigurationInvalid:
+      "The Supabase configuration is invalid. Check the public project URL.",
+    authOperationError:
+      "The operation could not be completed. Please try again shortly.",
+    authNetworkError:
+      "The authentication service is temporarily unreachable. Check your connection and try again.",
+    authCredentialsError: "Incorrect email address or password.",
+    authLinkInvalid:
+      "This link is invalid or has expired. Request a new link and try again.",
+    authPasswordRejected:
+      "The service rejected this password. Choose another password that meets its requirements.",
+    authCheckingSession: "Checking your session…",
+    authSessionRestoreError:
+      "Your session could not be verified. Reload the page or try again.",
+    authRecoveryAccepted:
+      "If this address matches an account and email delivery is configured, a password-reset link may arrive.",
+    authEmailVerified: "Your email address is confirmed.",
+    authAccountReady: "Your account is ready. You can start using TalkChat.",
+    authVerifyPending:
+      "Your request was accepted. If email confirmation is enabled, check your inbox. Delivery depends on the Supabase project's email configuration.",
+    authResetPasswordTitle: "Choose a new password",
+    authResetPasswordIntro:
+      "Enter and confirm a new password for your account.",
+    authResetPasswordSubmit: "Save password",
+    authResetPasswordLoading: "Saving…",
+    authPasswordUpdated: "Your password has been updated.",
+    authResetLinkRequired:
+      "There is no active, valid password-reset link. Request a new link.",
+    authResendEmail: "Email address",
+    authResendConfirmation: "Resend confirmation link",
+    authResendLoading: "Sending request…",
+    authEmailLinkRequested:
+      "The request was processed. If email delivery is configured, check your inbox.",
+    authInvalidCallback:
+      "This confirmation link is invalid or has expired. You can request a new link.",
     noAccount: "New to TalkChat?",
     registerLink: "Create an account",
     registerTitle: "Join TalkChat",
@@ -204,7 +262,7 @@ export const messages = {
     displayNamePlaceholder: "How would you like to appear?",
     birthDateLabel: "Date of birth",
     birthDateHint:
-      "Required for a future minimum age check of 13. This demo does not retain it.",
+      "Used only to check the minimum age of 13 in your browser; it is not sent to Supabase.",
     passwordConfirmLabel: "Confirm password",
     passwordConfirmPlaceholder: "Enter your password again",
     passwordRulesTitle: "Your password must include:",
@@ -219,35 +277,20 @@ export const messages = {
     privacyLink: "Privacy Policy",
     termsSuffix: ".",
     legalDraftSignupNote:
-      "These texts are drafts. This demo does not record your acceptance.",
+      "These texts are drafts. Your acceptance is not sent with the account request.",
     signupSubmit: "Create my account",
-    signupLoading: "Demo in progress…",
-    signupDemoNotice:
-      "Demo only: no account was created and no data was sent or saved.",
+    signupLoading: "Creating account…",
     haveAccount: "Already have an account?",
     loginLink: "Sign in",
     forgotTitle: "Reset your password",
     forgotIntro:
-      "Enter your email address to continue. This demo does not send messages.",
+      "Enter the email address associated with your account. Delivery depends on the project's email configuration.",
     resetSubmit: "Continue",
     resetLoading: "Preparing…",
-    resetConfirmTitle: "Demo step",
-    resetConfirmBody:
-      "If this feature were connected, the response would be the same whether or not the address matched an account.",
-    resetNoSend:
-      "No email was sent: this demo is not connected to any service.",
     returnLogin: "Back to sign in",
     verifyTitle: "Verify your email address",
     verifyIntro:
-      "In the full version of TalkChat, a verification message will be sent after account creation.",
-    verifyDemoNotice:
-      "Demo only: no account was created and no email was sent.",
-    verifyNoAddress:
-      "This demo does not use or retain the address entered earlier.",
-    verifyResend: "Simulate resending",
-    verifyLoading: "Simulating…",
-    verifyNoSend:
-      "No email was sent. Verification is not connected to a real service yet.",
+      "Follow the confirmation link you received or request a new one. Delivery depends on the Supabase project's email configuration.",
     verifyBack: "Back to account creation",
     errorRequired: "This field is required.",
     errorInvalidEmail: "Enter a valid email address.",
@@ -267,7 +310,7 @@ export const messages = {
     errorBody: "The page could not be displayed. Return home or try again.",
     accessDeniedTitle: "Access denied",
     accessDeniedBody:
-      "You do not have access to this page. No session or authentication is active in this demo.",
+      "You do not have access to this page. An authenticated session is required.",
     notFoundTitle: "This page could not be found",
     notFoundBody: "The link may be incorrect or the page may have moved.",
     unavailableTitle: "This page is unavailable",

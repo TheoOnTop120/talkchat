@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import ProblemPage from "./pages/ProblemPage";
 import RecoveryPage from "./pages/RecoveryPage";
 import RegisterPage from "./pages/RegisterPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerificationPage from "./pages/VerificationPage";
 import { RouterProvider } from "./routing/Router";
 import { useRouter } from "./routing/useRouter";
@@ -12,6 +13,7 @@ import { translate } from "./i18n/messages";
 import type { MessageKey } from "./i18n/messages";
 import type { Locale, Theme } from "./types/theme";
 import { getInitialTheme, saveTheme } from "./utils/theme";
+import { AuthProvider } from "./auth/AuthProvider";
 
 function RoutedApp() {
   const { pathname } = useRouter();
@@ -56,6 +58,8 @@ function RoutedApp() {
       return <RegisterPage {...pageProps} />;
     case "/forgot-password":
       return <RecoveryPage {...pageProps} />;
+    case "/reset-password":
+      return <ResetPasswordPage {...pageProps} />;
     case "/verify-email":
       return <VerificationPage {...pageProps} />;
     case "/legal/terms":
@@ -97,9 +101,11 @@ function RoutedApp() {
 
 function App() {
   return (
-    <RouterProvider>
-      <RoutedApp />
-    </RouterProvider>
+    <AuthProvider>
+      <RouterProvider>
+        <RoutedApp />
+      </RouterProvider>
+    </AuthProvider>
   );
 }
 

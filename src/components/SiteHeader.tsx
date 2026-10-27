@@ -2,6 +2,9 @@ import { AppLink } from "../routing/Router";
 import type { MessageKey } from "../i18n/messages";
 import type { Locale, Theme } from "../types/theme";
 import ThemeToggle from "./ThemeToggle";
+import { useState } from "react";
+import { useAuth } from "../auth/useAuth";
+import { getAuthErrorKey } from "../services/auth";
 
 type SiteHeaderProps = {
   locale: Locale;
@@ -18,6 +21,18 @@ function SiteHeader({
   onLocaleChange,
   onThemeToggle,
 }: SiteHeaderProps) {
+  const { status, signOut } = useAuth();
+  const [signOutError, setSignOutError] = useState<MessageKey | null>(null);
+
+  async function handleSignOut() {
+    setSignOutError(null);
+    try {
+      await signOut();
+    } catch (error) {
+      setSignOutError(getAuthErrorKey(error));
+    }
+  }
+
   return (
     <header className="site-header">
       <AppLink
@@ -52,12 +67,24 @@ function SiteHeader({
       </nav>
 
       <div className="header-actions">
-        <AppLink className="header-auth-link" to="/login">
-          {t("navLogin")}
-        </AppLink>
-        <AppLink className="header-signup-link" to="/register">
-          {t("navSignup")}
-        </AppLink>
+        {status === "signed-in" ? (
+          <button
+            className="header-signout-link"
+            onClick={handleSignOut}
+            type="button"
+          >
+            {t("signOut")}
+          </button>
+        ) : (
+          <>
+            <AppLink className="header-auth-link" to="/login">
+              {t("navLogin")}
+            </AppLink>
+            <AppLink className="header-signup-link" to="/register">
+              {t("navSignup")}
+            </AppLink>
+          </>
+        )}
         <label className="visually-hidden" htmlFor="language-select">
           {t("language")}
         </label>
@@ -79,6 +106,11 @@ function SiteHeader({
           onToggle={onThemeToggle}
           theme={theme}
         />
+        {signOutError && (
+          <span className="header-auth-error" role="alert">
+            {t(signOutError)}
+          </span>
+        )}
       </div>
     </header>
   );

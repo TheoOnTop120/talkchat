@@ -8,17 +8,22 @@ import type { AppPageProps } from "../types/app";
 import type { MessageKey } from "../i18n/messages";
 import { fieldDescriptionIds } from "../utils/forms";
 import { validateEmail } from "../utils/validation";
+import { useAuth } from "../auth/useAuth";
+import { getAuthErrorKey } from "../services/auth";
+import { useRouter } from "../routing/useRouter";
 
 function LoginPage(props: AppPageProps) {
+  const { signIn } = useAuth();
+  const { navigate } = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Partial<Record<"email" | "password", MessageKey>>>({});
   const [loading, setLoading] = useState(false);
-  const [notice, setNotice] = useState(false);
+  const [authError, setAuthError] = useState<MessageKey | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setNotice(false);
+    setAuthError(null);
     const nextErrors: Partial<Record<"email" | "password", MessageKey>> = {};
     const emailError = validateEmail(email);
 
@@ -38,10 +43,15 @@ function LoginPage(props: AppPageProps) {
     }
 
     setLoading(true);
-    await new Promise((resolve) => window.setTimeout(resolve, 650));
-    setLoading(false);
-    setPassword("");
-    setNotice(true);
+    try {
+      await signIn(email, password);
+      setPassword("");
+      navigate("/");
+    } catch (error) {
+      setAuthError(getAuthErrorKey(error));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -54,6 +64,11 @@ function LoginPage(props: AppPageProps) {
         {Object.values(errors).some(Boolean) && (
           <p className="form-error-summary" role="alert">
             {props.t("formErrorSummary")}
+          </p>
+        )}
+        {authError && (
+          <p className="form-error-summary" role="alert">
+            {props.t(authError)}
           </p>
         )}
         <FormField
@@ -104,11 +119,6 @@ function LoginPage(props: AppPageProps) {
         >
           {loading ? props.t("loginLoading") : props.t("loginSubmit")}
         </button>
-        {notice && (
-          <p className="form-status" role="status">
-            {props.t("loginDemoNotice")}
-          </p>
-        )}
       </form>
       <p className="auth-switch">
         {props.t("noAccount")}{" "}

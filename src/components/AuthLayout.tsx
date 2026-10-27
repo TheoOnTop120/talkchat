@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import SiteHeader from "./SiteHeader";
 import type { AppPageProps } from "../types/app";
 import LegalFooterLinks from "./LegalFooterLinks";
+import AuthConfigurationNotice from "./AuthConfigurationNotice";
 import "../styles/auth.css";
 
 type AuthLayoutProps = AppPageProps & {
@@ -26,6 +27,7 @@ function AuthLayout({
         {pageProps.t("skipLink")}
       </a>
       <SiteHeader {...pageProps} />
+      <AuthConfigurationNotice t={pageProps.t} />
       <main
         className={`auth-main${legal ? " auth-main-legal" : ""}`}
         id="main-content"

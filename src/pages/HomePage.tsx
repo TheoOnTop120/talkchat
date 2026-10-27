@@ -1,5 +1,6 @@
 import SiteHeader from "../components/SiteHeader";
 import LegalFooterLinks from "../components/LegalFooterLinks";
+import AuthConfigurationNotice from "../components/AuthConfigurationNotice";
 import { AppLink } from "../routing/Router";
 import "../styles/home.css";
 import type { AppPageProps } from "../types/app";
@@ -11,6 +12,7 @@ function HomePage({ t, ...pageProps }: AppPageProps) {
         {t("skipLink")}
       </a>
       <SiteHeader {...pageProps} t={t} />
+      <AuthConfigurationNotice t={t} />
 
       <main id="main-content">
         <section aria-labelledby="hero-title" className="hero" id="home">

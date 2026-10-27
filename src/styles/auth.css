@@ -3,7 +3,8 @@
 }
 
 .header-auth-link,
-.header-signup-link {
+.header-signup-link,
+.header-signout-link {
   color: var(--muted-strong);
   font-size: 0.82rem;
   font-weight: 600;
@@ -15,18 +16,37 @@
   color: var(--accent-strong);
 }
 
-.header-signup-link {
+.header-signup-link,
+.header-signout-link {
   padding: 0.62rem 0.85rem;
   border: 1px solid var(--line);
   border-radius: 11px;
   color: var(--accent-strong);
   background: var(--surface);
+  font-family: inherit;
+  cursor: pointer;
   transition:
     border-color 160ms ease,
     background-color 160ms ease;
 }
 
+.auth-config-notice {
+  width: min(100% - 6rem, 1176px);
+  margin: 0.75rem auto 0;
+}
+
+.header-auth-error {
+  max-width: 16rem;
+  color: #a82f47;
+  font-size: 0.75rem;
+}
+
 .header-signup-link:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.header-signout-link:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
 }
@@ -588,7 +608,8 @@
     gap: 0.25rem;
   }
 
-  .header-signup-link {
+  .header-signup-link,
+  .header-signout-link {
     padding: 0.55rem 0.65rem;
     font-size: 0.72rem;
   }

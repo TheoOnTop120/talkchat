@@ -37,14 +37,14 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "1. État actuel du projet",
           paragraphs: [
-            "TalkChat est actuellement une démonstration d’interface. Les formulaires d’inscription, de connexion et de récupération ne créent aucun compte, n’ouvrent aucune session et n’envoient aucun message. Aucun service de messagerie n’est encore proposé par cette maquette.",
-            "Ce brouillon décrit des sujets à traiter si un service est lancé. Il ne prouve pas qu’un service, une assistance ou un mécanisme de modération est disponible aujourd’hui.",
+            "TalkChat utilise Supabase Auth pour les comptes, les connexions et la récupération de mot de passe. La messagerie, le stockage de conversations et la modération ne sont pas implémentés.",
+            "Ce brouillon décrit des sujets à traiter si un service est lancé. Il ne prouve pas qu’un service de messagerie, une assistance ou un mécanisme de modération est disponible aujourd’hui.",
           ],
         },
         {
           heading: "2. Accès et âge minimum envisagés",
           paragraphs: [
-            "Une future version pourrait demander la création d’un compte et appliquer une condition d’âge minimum. L’interface actuelle demande une date de naissance pour préparer un contrôle à partir de 13 ans, mais cette vérification n’est pas un contrôle d’identité et aucune règle d’âge n’est mise en œuvre côté serveur.",
+            "L’interface demande une date de naissance et vérifie localement un âge minimum de 13 ans avant l’inscription. Cette vérification n’est pas un contrôle d’identité et aucune règle d’âge n’est appliquée côté serveur.",
             "L’âge minimum, les modalités de vérification et les règles applicables aux mineurs devront être validés pour les pays où le service sera proposé avant son ouverture.",
           ],
         },
@@ -52,7 +52,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
           heading: "3. Comportements attendus si le service existe",
           paragraphs: [
             "Les utilisateurs d’un futur service devront respecter les lois applicables et les règles de la communauté. Les usages abusifs, les tentatives d’accès non autorisé, l’usurpation d’identité et les contenus portant atteinte aux droits d’autrui devront être traités selon des règles publiées et un processus de recours défini.",
-            "Aucune sanction, modération ou procédure d’appel réelle n’est opérée par la démonstration actuelle.",
+            "Aucune sanction, modération ou procédure d’appel réelle n’est opérée.",
           ],
         },
         {
@@ -64,7 +64,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "5. Disponibilité, responsabilité et fin du service",
           paragraphs: [
-            "Aucun engagement de disponibilité, de conservation des messages ou de continuité de service ne peut être déduit de cette maquette. Les exclusions, limites de responsabilité, règles de résiliation, export et suppression devront être rédigées et vérifiées au regard du droit applicable avant le lancement.",
+            "Aucun engagement de disponibilité, de conservation des messages ou de continuité de service ne peut être déduit de cette version. Les exclusions, limites de responsabilité, règles de résiliation, export et suppression devront être rédigées et vérifiées au regard du droit applicable avant le lancement.",
           ],
         },
         {
@@ -85,23 +85,23 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
     privacy: {
       title: "Politique de confidentialité",
       summary:
-        "Cette page décrit la démonstration telle qu’elle fonctionne maintenant et les informations qui restent à définir avant un lancement public.",
+        "Cette page décrit les traitements actuellement prévus par TalkChat et les informations qui restent à définir avant un lancement public.",
       draftNotice:
         "BROUILLON À FAIRE VÉRIFIER : ceci n’est pas un avis juridique ni une garantie de conformité. Les finalités, bases juridiques, responsables, destinataires, durées de conservation et droits devront être précisés et vérifiés selon les pays concernés avant le lancement.",
       reviewedAt: "Brouillon — aucune date d’entrée en vigueur.",
       sections: [
         {
-          heading: "1. Données utilisées par la démonstration actuelle",
+          heading: "1. Données utilisées par la version actuelle",
           paragraphs: [
-            "La maquette ne possède ni compte utilisateur, ni backend, ni base de données. Elle ne transmet pas les formulaires à un serveur ou à un service tiers.",
-            "Pendant l’utilisation d’un formulaire, le nom d’affichage, l’adresse e-mail, la date de naissance, l’acceptation des cases et les valeurs saisies sont conservés temporairement dans la mémoire de la page. Les mots de passe restent eux aussi dans la mémoire du navigateur le temps de la démonstration ; ils sont effacés après l’action simulée réussie. Les autres valeurs disparaissent lorsque l’on quitte ou recharge la page. Le navigateur peut indépendamment proposer de mémoriser des champs avec sa fonction de remplissage automatique.",
+            "Lors de l’inscription et de la connexion, l’adresse e-mail et le mot de passe sont transmis directement au projet Supabase configuré pour utiliser Supabase Auth. Le nom d’affichage est transmis comme métadonnée du compte. La date de naissance et l’acceptation des conditions sont utilisées uniquement dans le navigateur et ne sont pas envoyées.",
+            "Le SDK Supabase gère la persistance de la session dans le navigateur. Les autres valeurs des formulaires restent temporairement en mémoire de la page ; le navigateur peut indépendamment proposer de mémoriser des champs avec sa fonction de remplissage automatique.",
             "La seule préférence de l’application enregistrée localement est le thème clair ou sombre, dans le stockage local du navigateur. La langue sélectionnée est conservée uniquement pendant la navigation de la page et revient au français lors d’un nouveau chargement.",
           ],
         },
         {
           heading: "2. Services externes et journaux",
           paragraphs: [
-            "Le code de cette démonstration ne transmet pas les formulaires vers un backend, Supabase, un service d’e-mail ou un service d’analyse. Si le site est hébergé publiquement, l’hébergeur et l’infrastructure réseau pourraient traiter des données de connexion ou tenir des journaux : ces traitements devront être vérifiés et décrits avant le lancement.",
+            "Supabase traite les données nécessaires aux opérations d’authentification. L’envoi des e-mails dépend de la configuration du projet et de son fournisseur SMTP ; cette configuration n’a pas été vérifiée. Aucun service d’analyse ni aucune messagerie TalkChat n’est implémenté. L’hébergeur et l’infrastructure réseau peuvent aussi traiter des données de connexion ou tenir des journaux.",
           ],
         },
         {
@@ -188,7 +188,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "La fonction n’est pas encore disponible",
           paragraphs: [
-            "Cette page n’envoie aucun rapport et ne collecte pas de preuve. N’utilisez pas les formulaires de connexion ou d’inscription pour signaler un problème : ils sont des démonstrations locales.",
+            "Cette page n’envoie aucun rapport et ne collecte pas de preuve. N’utilisez pas les formulaires de connexion ou d’inscription pour signaler un problème : ils servent uniquement à l’authentification.",
             "Aucune adresse e-mail ou coordonnée de signalement n’est indiquée, car aucun canal opérationnel n’a été défini. Cette page ne peut pas recevoir ni traiter une demande.",
           ],
         },
@@ -233,8 +233,8 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "État de la démonstration",
           paragraphs: [
-            "Cette version frontend n’a pas de backend, d’authentification réelle, de comptes, de base de données ni de conversations. Elle n’implémente pas le chiffrement de bout en bout, une sauvegarde sécurisée, une suppression automatique, une surveillance, une limitation serveur des tentatives ou un processus de réponse aux incidents.",
-            "Les champs de formulaire restent temporairement dans la mémoire de la page pour les démonstrations. Aucun secret ni mot de passe réel ne doit être saisi dans cette maquette.",
+            "Supabase Auth fournit l’inscription, la connexion, la gestion de session et la récupération de mot de passe. Cette version frontend n’implémente pas de messagerie, de chiffrement de bout en bout, de sauvegarde sécurisée, de suppression automatique, de surveillance, de limitation serveur des tentatives ou de processus de réponse aux incidents.",
+            "La protection des routes dans le navigateur ne constitue pas une frontière d’autorisation et ne remplace pas les contrôles côté serveur ni les politiques RLS Supabase. Aucune table de messages ou de profils n’est implémentée.",
           ],
         },
         {
@@ -252,7 +252,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "Limites et signalement d’un problème de sécurité",
           paragraphs: [
-            "Ces objectifs ne constituent ni une certification ni une garantie de protection absolue. Le responsable de sécurité, le canal de divulgation, les délais de réponse et les coordonnées publiques ne sont pas encore définis. N’incluez pas de données personnelles ou de secrets dans les champs de la maquette.",
+            "Ces objectifs ne constituent ni une certification ni une garantie de protection absolue. Le responsable de sécurité, le canal de divulgation, les délais de réponse et les coordonnées publiques ne sont pas encore définis. N’utilisez pas les formulaires d’authentification pour transmettre des informations autres que celles demandées.",
           ],
         },
       ],
@@ -277,14 +277,14 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "1. Current project status",
           paragraphs: [
-            "TalkChat is currently an interface demonstration. Sign-up, sign-in, and recovery forms do not create accounts, start sessions, or send messages. This demo does not yet offer a messaging service.",
+            "TalkChat uses Supabase Auth for accounts, sign-in, and password recovery. Messaging, conversation storage, and moderation are not implemented.",
             "This draft lists topics to address if a service launches. It does not mean that a service, support channel, or moderation process is available today.",
           ],
         },
         {
           heading: "2. Intended access and minimum age",
           paragraphs: [
-            "A future version might require an account and apply a minimum-age condition. The current interface asks for a date of birth to prepare a check from age 13, but this is not identity verification and no server-side age rule is implemented.",
+            "The interface requests a date of birth and checks a minimum age of 13 locally before sign-up. This is not identity verification, and no server-side age rule is enforced.",
             "The minimum age, verification method, and rules for minors must be reviewed for every country where the service may be offered before launch.",
           ],
         },
@@ -292,7 +292,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
           heading: "3. Expected conduct if a service exists",
           paragraphs: [
             "Users of a future service would need to comply with applicable law and the community rules. Abuse, unauthorized access attempts, impersonation, and content that violates others’ rights would need published rules and a defined appeal process.",
-            "The current demo does not operate any real sanctions, moderation, or appeals process.",
+            "No real sanctions, moderation, or appeals process is in operation.",
           ],
         },
         {
@@ -304,7 +304,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "5. Availability, liability, and ending the service",
           paragraphs: [
-            "This demo makes no commitment about availability, message retention, or service continuity. Disclaimers, liability limits, termination, export, and deletion rules must be drafted and reviewed under applicable law before launch.",
+            "This version makes no commitment about availability, message retention, or service continuity. Disclaimers, liability limits, termination, export, and deletion rules must be drafted and reviewed under applicable law before launch.",
           ],
         },
         {
@@ -325,23 +325,23 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
     privacy: {
       title: "Privacy Policy",
       summary:
-        "This page describes the demo as it works today and the information that still needs to be defined before a public launch.",
+        "This page describes TalkChat's current processing and the information that still needs to be defined before a public launch.",
       draftNotice:
         "DRAFT — LEGAL REVIEW REQUIRED: this is not legal advice or a compliance guarantee. Purposes, legal bases, controllers, recipients, retention periods, and rights must be specified and reviewed for relevant jurisdictions before launch.",
       reviewedAt: "Draft — no effective date.",
       sections: [
         {
-          heading: "1. Data used by the current demo",
+          heading: "1. Data used by the current version",
           paragraphs: [
-            "The demo has no user accounts, backend, or database. It does not send form data to a server or third-party service.",
-            "While a form is open, the display name, email address, date of birth, checkbox selection, and entered values are temporarily held in page memory. Passwords also remain in browser memory during the demo; they are cleared after the simulated successful action. Other values disappear when leaving or reloading the page. Your browser may independently offer to remember fields using its autofill feature.",
+            "During sign-up and sign-in, the email address and password are sent directly to the configured Supabase project for Supabase Auth. The display name is sent as account metadata. Date of birth and acceptance of the terms are used only in the browser and are not sent.",
+            "The Supabase SDK manages session persistence in the browser. Other form values remain temporarily in page memory; your browser may independently offer to remember fields using its autofill feature.",
             "The only application preference saved locally is the light or dark theme, in the browser’s local storage. The selected language is kept only during client-side navigation and returns to French after a fresh page load.",
           ],
         },
         {
           heading: "2. External services and logs",
           paragraphs: [
-            "The code in this demo does not send form data to a backend, Supabase, an email service, or an analytics service. If the site is hosted publicly, the hosting provider and network infrastructure may process connection data or keep logs; those processing activities must be reviewed and described before launch.",
+            "Supabase processes data needed for authentication. Email delivery depends on the project's configuration and SMTP provider; this configuration has not been verified. No analytics service or TalkChat messaging feature is implemented. The hosting provider and network infrastructure may also process connection data or keep logs.",
           ],
         },
         {
@@ -428,7 +428,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
         {
           heading: "Reporting is not available yet",
           paragraphs: [
-            "This page does not send a report or collect evidence. Do not use the sign-up or sign-in forms to report an issue; they are local demonstrations.",
+            "This page does not send a report or collect evidence. Do not use the sign-up or sign-in forms to report an issue; they are only for account authentication.",
             "No reporting email address or contact details are listed because no operational channel has been defined. This page cannot receive or process a request.",
           ],
         },
@@ -471,10 +471,10 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
       reviewedAt: "Prototype information — review before launch.",
       sections: [
         {
-          heading: "Current demo status",
+          heading: "Current project status",
           paragraphs: [
-            "This frontend version has no backend, real authentication, accounts, database, or conversations. It does not implement end-to-end encryption, secure backups, automatic deletion, monitoring, server-side attempt limits, or an incident response process.",
-            "Form values temporarily remain in page memory for demonstrations. Do not enter secrets or real passwords into this demo.",
+            "Supabase Auth provides account registration, sign-in, session handling, and password recovery. This frontend does not implement messaging, end-to-end encryption, secure backups, automatic deletion, monitoring, server-side attempt limits, or an incident response process.",
+            "The frontend route guard is not an authorization boundary and does not replace server-side checks or Supabase RLS policies. No message or profile tables are implemented.",
           ],
         },
         {

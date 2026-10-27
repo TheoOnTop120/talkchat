@@ -14,8 +14,11 @@ import {
   passwordRules,
   validateEmail,
 } from "../utils/validation";
+import { useAuth } from "../auth/useAuth";
+import { getAuthErrorKey } from "../services/auth";
 
 function RegisterPage(props: AppPageProps) {
+  const { signUp } = useAuth();
   const { navigate } = useRouter();
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,10 +30,12 @@ function RegisterPage(props: AppPageProps) {
     Partial<Record<"displayName" | "email" | "birthDate" | "password" | "confirmation" | "accepted", MessageKey>>
   >({});
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<MessageKey | null>(null);
   const rules = passwordRules(password);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setAuthError(null);
     const nextErrors: typeof errors = {};
 
     if (displayName.trim().length < 2 || displayName.trim().length > 40) {
@@ -74,11 +79,16 @@ function RegisterPage(props: AppPageProps) {
     }
 
     setLoading(true);
-    await new Promise((resolve) => window.setTimeout(resolve, 650));
-    setLoading(false);
-    setPassword("");
-    setConfirmation("");
-    navigate("/verify-email");
+    try {
+      await signUp(displayName, email, password);
+      setPassword("");
+      setConfirmation("");
+      navigate("/verify-email");
+    } catch (error) {
+      setAuthError(getAuthErrorKey(error));
+    } finally {
+      setLoading(false);
+    }
   }
 
   const passwordChecklist: Array<[keyof typeof rules, MessageKey]> = [
@@ -100,6 +110,11 @@ function RegisterPage(props: AppPageProps) {
         {Object.values(errors).some(Boolean) && (
           <p className="form-error-summary" role="alert">
             {props.t("formErrorSummary")}
+          </p>
+        )}
+        {authError && (
+          <p className="form-error-summary" role="alert">
+            {props.t(authError)}
           </p>
         )}
         <FormField
@@ -258,11 +273,6 @@ function RegisterPage(props: AppPageProps) {
         >
           {loading ? props.t("signupLoading") : props.t("signupSubmit")}
         </button>
-        {loading && (
-          <p className="form-status" role="status">
-            {props.t("signupDemoNotice")}
-          </p>
-        )}
       </form>
       <p className="auth-switch">
         {props.t("haveAccount")}{" "}
