@@ -75,6 +75,7 @@ function RecoveryPage(props: AppPageProps) {
               aria-invalid={Boolean(error)}
               autoComplete="email"
               className="text-input"
+              dir="ltr"
               id="email"
               onChange={(event) => {
                 setEmail(event.target.value);

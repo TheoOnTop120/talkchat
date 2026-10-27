@@ -27,7 +27,17 @@ function RegisterPage(props: AppPageProps) {
   const [confirmation, setConfirmation] = useState("");
   const [accepted, setAccepted] = useState(false);
   const [errors, setErrors] = useState<
-    Partial<Record<"displayName" | "email" | "birthDate" | "password" | "confirmation" | "accepted", MessageKey>>
+    Partial<
+      Record<
+        | "displayName"
+        | "email"
+        | "birthDate"
+        | "password"
+        | "confirmation"
+        | "accepted",
+        MessageKey
+      >
+    >
   >({});
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState<MessageKey | null>(null);
@@ -152,6 +162,7 @@ function RegisterPage(props: AppPageProps) {
             aria-invalid={Boolean(errors.email)}
             autoComplete="email"
             className="text-input"
+            dir="ltr"
             id="email"
             onChange={(event) => {
               setEmail(event.target.value);
@@ -200,7 +211,10 @@ function RegisterPage(props: AppPageProps) {
             t={props.t}
             value={password}
           />
-          <div aria-label={props.t("passwordRulesTitle")} className="password-rules">
+          <div
+            aria-label={props.t("passwordRulesTitle")}
+            className="password-rules"
+          >
             <p>{props.t("passwordRulesTitle")}</p>
             <ul>
               {passwordChecklist.map(([rule, key]) => (
@@ -220,9 +234,7 @@ function RegisterPage(props: AppPageProps) {
         </div>
         <PasswordField
           autoComplete="new-password"
-          error={
-            errors.confirmation ? props.t(errors.confirmation) : undefined
-          }
+          error={errors.confirmation ? props.t(errors.confirmation) : undefined}
           id="confirmation"
           label={props.t("passwordConfirmLabel")}
           onChange={(value) => {
@@ -248,13 +260,9 @@ function RegisterPage(props: AppPageProps) {
             />
             <span>
               {props.t("termsPrefix")}{" "}
-              <AppLink to="/legal/terms">
-                {props.t("termsLink")}
-              </AppLink>{" "}
+              <AppLink to="/legal/terms">{props.t("termsLink")}</AppLink>{" "}
               {props.t("termsAnd")}{" "}
-              <AppLink to="/legal/privacy">
-                {props.t("privacyLink")}
-              </AppLink>
+              <AppLink to="/legal/privacy">{props.t("privacyLink")}</AppLink>
               {props.t("termsSuffix")}
             </span>
           </label>

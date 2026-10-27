@@ -23,11 +23,12 @@ function isValidSupabaseUrl(value: string): boolean {
 let configurationError:
   | "authConfigurationMissing"
   | "authConfigurationInvalid"
-  | null = !supabaseUrl?.trim() || !supabasePublishableKey?.trim()
-  ? "authConfigurationMissing"
-  : !isValidSupabaseUrl(supabaseUrl)
-    ? "authConfigurationInvalid"
-    : null;
+  | null =
+  !supabaseUrl?.trim() || !supabasePublishableKey?.trim()
+    ? "authConfigurationMissing"
+    : !isValidSupabaseUrl(supabaseUrl)
+      ? "authConfigurationInvalid"
+      : null;
 
 let client: SupabaseClient | null = null;
 if (!configurationError) {

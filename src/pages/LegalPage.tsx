@@ -20,6 +20,11 @@ function LegalPage({ documentId, ...props }: LegalPageProps) {
       wide
     >
       <article aria-label={document.title} className="legal-document">
+        {props.locale !== "fr" && props.locale !== "en" && (
+          <aside className="legal-draft-notice" role="note">
+            {props.t("legalTranslationNotice")}
+          </aside>
+        )}
         <aside className="legal-draft-notice" role="note">
           <strong>{document.draftNotice}</strong>
         </aside>
@@ -31,16 +36,16 @@ function LegalPage({ documentId, ...props }: LegalPageProps) {
             return (
               <section aria-labelledby={headingId} key={headingId}>
                 <h2 id={headingId}>{section.heading}</h2>
-              {section.paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
-              {section.bullets && (
-                <ul>
-                  {section.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
-              )}
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+                {section.bullets && (
+                  <ul>
+                    {section.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                )}
               </section>
             );
           })}

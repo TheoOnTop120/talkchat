@@ -5,6 +5,7 @@ import ThemeToggle from "./ThemeToggle";
 import { useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { getAuthErrorKey } from "../services/auth";
+import { isLocale, locales } from "../i18n/locales";
 
 type SiteHeaderProps = {
   locale: Locale;
@@ -35,11 +36,7 @@ function SiteHeader({
 
   return (
     <header className="site-header">
-      <AppLink
-        aria-label={t("brandHome")}
-        className="brand"
-        to="/"
-      >
+      <AppLink aria-label={t("brandHome")} className="brand" to="/">
         <span aria-hidden="true" className="brand-mark">
           <svg fill="none" viewBox="0 0 28 28">
             <path
@@ -89,17 +86,21 @@ function SiteHeader({
           {t("language")}
         </label>
         <select
+          aria-label={t("language")}
           className="language-select"
           id="language-select"
           onChange={(event) => {
-            if (event.target.value === "fr" || event.target.value === "en") {
+            if (isLocale(event.target.value)) {
               onLocaleChange(event.target.value);
             }
           }}
           value={locale}
         >
-          <option value="fr">FR</option>
-          <option value="en">EN</option>
+          {locales.map(({ code, name }) => (
+            <option key={code} value={code}>
+              {name}
+            </option>
+          ))}
         </select>
         <ThemeToggle
           label={t(theme === "light" ? "themeDark" : "themeLight")}

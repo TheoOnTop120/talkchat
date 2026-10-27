@@ -17,7 +17,9 @@ function LoginPage(props: AppPageProps) {
   const { navigate } = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<Partial<Record<"email" | "password", MessageKey>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<"email" | "password", MessageKey>>
+  >({});
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState<MessageKey | null>(null);
 
@@ -83,6 +85,7 @@ function LoginPage(props: AppPageProps) {
             aria-invalid={Boolean(errors.email)}
             autoComplete="email"
             className="text-input"
+            dir="ltr"
             id="email"
             onChange={(event) => {
               setEmail(event.target.value);

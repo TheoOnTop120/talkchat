@@ -18,8 +18,7 @@ export function getAuthErrorKey(error: unknown): MessageKey {
     return error.messageKey;
   }
 
-  const message =
-    error instanceof Error ? error.message.toLowerCase() : "";
+  const message = error instanceof Error ? error.message.toLowerCase() : "";
 
   if (
     message.includes("expired") ||
@@ -59,9 +58,7 @@ export function getAuthErrorKey(error: unknown): MessageKey {
 }
 
 async function runAuthOperation(
-  operation: (
-    client: SupabaseClient,
-  ) => Promise<{ error: AuthError | null }>,
+  operation: (client: SupabaseClient) => Promise<{ error: AuthError | null }>,
 ): Promise<void> {
   if (!supabase) {
     throw new AuthServiceError(

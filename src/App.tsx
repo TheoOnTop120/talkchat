@@ -9,25 +9,58 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerificationPage from "./pages/VerificationPage";
 import { RouterProvider } from "./routing/Router";
 import { useRouter } from "./routing/useRouter";
-import { translate } from "./i18n/messages";
+import { loadMessageCatalog, translate } from "./i18n/messages";
+import { loadLegalCatalog } from "./i18n/legal";
 import type { MessageKey } from "./i18n/messages";
 import type { Locale, Theme } from "./types/theme";
 import { getInitialTheme, saveTheme } from "./utils/theme";
 import { AuthProvider } from "./auth/AuthProvider";
+import {
+  applyLocaleToDocument,
+  getInitialLocale,
+  saveLocale,
+} from "./i18n/locales";
 
 function RoutedApp() {
   const { pathname } = useRouter();
   const [theme, setTheme] = useState(getInitialTheme);
-  const [locale, setLocale] = useState<Locale>("fr");
+  const [locale, setLocale] = useState<Locale>(() => {
+    try {
+      return getInitialLocale(window.localStorage, navigator.languages);
+    } catch {
+      return getInitialLocale(null, navigator.languages);
+    }
+  });
+  const [readyLocale, setReadyLocale] = useState<Locale | null>(null);
+  const [catalogLoadError, setCatalogLoadError] = useState(false);
   const t = (key: MessageKey) => translate(locale, key);
 
   useEffect(() => {
-    document.documentElement.lang = locale;
+    let active = true;
+    void Promise.all([loadMessageCatalog(locale), loadLegalCatalog(locale)])
+      .then(() => {
+        if (active) setReadyLocale(locale);
+      })
+      .catch(() => {
+        if (active) setCatalogLoadError(true);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [locale]);
+
+  useEffect(() => {
+    if (readyLocale !== locale) return;
+    applyLocaleToDocument(locale, document.documentElement);
     document.title = translate(locale, "pageTitle");
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", translate(locale, "pageDescription"));
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute("content", theme === "light" ? "#f8f7ff" : "#15141f");
-  }, [locale, theme]);
+  }, [locale, readyLocale, theme]);
 
   useEffect(() => {
     requestAnimationFrame(() => {
@@ -41,13 +74,30 @@ function RoutedApp() {
     saveTheme(nextTheme);
   }
 
+  function changeLocale(nextLocale: Locale) {
+    setCatalogLoadError(false);
+    setLocale(nextLocale);
+    try {
+      saveLocale(nextLocale, window.localStorage);
+    } catch {
+      saveLocale(nextLocale, null);
+    }
+  }
+
   const pageProps = {
     locale,
     theme,
     t,
-    onLocaleChange: setLocale,
+    onLocaleChange: changeLocale,
     onThemeToggle: toggleTheme,
   };
+
+  if (catalogLoadError) {
+    return <main role="alert">{translate("en", "catalogLoadError")}</main>;
+  }
+  if (readyLocale !== locale) {
+    return <main aria-busy="true">TalkChat</main>;
+  }
 
   switch (pathname) {
     case "/":
@@ -78,11 +128,7 @@ function RoutedApp() {
       return <ProblemPage {...pageProps} kind="access" pathname={pathname} />;
     case "/unavailable":
       return (
-        <ProblemPage
-          {...pageProps}
-          kind="unavailable"
-          pathname={pathname}
-        />
+        <ProblemPage {...pageProps} kind="unavailable" pathname={pathname} />
       );
     case "/not-found":
       return (
@@ -90,11 +136,7 @@ function RoutedApp() {
       );
     default:
       return (
-        <ProblemPage
-          {...pageProps}
-          kind="not-found"
-          pathname={pathname}
-        />
+        <ProblemPage {...pageProps} kind="not-found" pathname={pathname} />
       );
   }
 }

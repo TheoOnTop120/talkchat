@@ -101,6 +101,7 @@ function VerificationPage(props: AppPageProps) {
                 aria-invalid={Boolean(emailError)}
                 autoComplete="email"
                 className="text-input"
+                dir="ltr"
                 id="verification-email"
                 onChange={(event) => {
                   setEmail(event.target.value);

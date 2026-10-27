@@ -7,13 +7,13 @@ export type LegalDocumentId =
   | "report"
   | "security";
 
-type LegalSection = {
+export type LegalSection = {
   heading: string;
   paragraphs: string[];
   bullets?: string[];
 };
 
-type LegalDocument = {
+export type LegalDocument = {
   title: string;
   summary: string;
   draftNotice: string;
@@ -24,7 +24,7 @@ type LegalDocument = {
   backHome: string;
 };
 
-const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
+const documents: Record<"fr" | "en", Record<LegalDocumentId, LegalDocument>> = {
   fr: {
     terms: {
       title: "Conditions d’utilisation",
@@ -95,7 +95,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
           paragraphs: [
             "Lors de l’inscription et de la connexion, l’adresse e-mail et le mot de passe sont transmis directement au projet Supabase configuré pour utiliser Supabase Auth. Le nom d’affichage est transmis comme métadonnée du compte. La date de naissance et l’acceptation des conditions sont utilisées uniquement dans le navigateur et ne sont pas envoyées.",
             "Le SDK Supabase gère la persistance de la session dans le navigateur. Les autres valeurs des formulaires restent temporairement en mémoire de la page ; le navigateur peut indépendamment proposer de mémoriser des champs avec sa fonction de remplissage automatique.",
-            "La seule préférence de l’application enregistrée localement est le thème clair ou sombre, dans le stockage local du navigateur. La langue sélectionnée est conservée uniquement pendant la navigation de la page et revient au français lors d’un nouveau chargement.",
+            "Les préférences de thème et de langue sont conservées séparément dans le stockage local du navigateur. Si ce stockage est indisponible, elles ne sont conservées que pour la visite en cours.",
           ],
         },
         {
@@ -335,7 +335,7 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
           paragraphs: [
             "During sign-up and sign-in, the email address and password are sent directly to the configured Supabase project for Supabase Auth. The display name is sent as account metadata. Date of birth and acceptance of the terms are used only in the browser and are not sent.",
             "The Supabase SDK manages session persistence in the browser. Other form values remain temporarily in page memory; your browser may independently offer to remember fields using its autofill feature.",
-            "The only application preference saved locally is the light or dark theme, in the browser’s local storage. The selected language is kept only during client-side navigation and returns to French after a fresh page load.",
+            "Theme and language preferences are stored separately in the browser's local storage. If storage is unavailable, they are kept only for the current visit.",
           ],
         },
         {
@@ -507,9 +507,97 @@ const documents: Record<Locale, Record<LegalDocumentId, LegalDocument>> = {
   },
 };
 
+const loadedLegalCatalogs = new Map<
+  Locale,
+  Record<LegalDocumentId, LegalDocument>
+>([
+  ["fr", documents.fr],
+  ["en", documents.en],
+]);
+
+const legalCatalogLoaders = {
+  groupA: () =>
+    import("./legalCatalogs/groupA.ts").then(({ legalGroupA }) => legalGroupA),
+  groupB: () =>
+    import("./legalCatalogs/groupB.ts").then(({ legalGroupB }) => legalGroupB),
+  groupC: () =>
+    import("./legalCatalogs/groupC.ts").then(({ legalGroupC }) => legalGroupC),
+  groupD: () =>
+    import("./legalCatalogs/groupD.ts").then(({ legalGroupD }) => legalGroupD),
+};
+
+const legalLocaleGroups = {
+  nl: "groupA",
+  de: "groupA",
+  es: "groupA",
+  pt: "groupA",
+  it: "groupA",
+  pl: "groupA",
+  uk: "groupA",
+  ru: "groupA",
+  tr: "groupA",
+  ar: "groupA",
+  he: "groupB",
+  fa: "groupB",
+  ur: "groupB",
+  hi: "groupB",
+  bn: "groupB",
+  "zh-Hans": "groupB",
+  "zh-Hant": "groupB",
+  ja: "groupB",
+  ko: "groupB",
+  id: "groupB",
+  vi: "groupC",
+  th: "groupC",
+  sv: "groupC",
+  nb: "groupC",
+  da: "groupC",
+  fi: "groupC",
+  el: "groupC",
+  ro: "groupC",
+  cs: "groupC",
+  sk: "groupC",
+  hu: "groupD",
+  bg: "groupD",
+  hr: "groupD",
+  "sr-Latn": "groupD",
+  sl: "groupD",
+  lt: "groupD",
+  lv: "groupD",
+  et: "groupD",
+  ca: "groupD",
+} as const satisfies Record<
+  Exclude<Locale, "fr" | "en">,
+  keyof typeof legalCatalogLoaders
+>;
+
+export async function loadLegalCatalog(locale: Locale): Promise<void> {
+  if (loadedLegalCatalogs.has(locale)) {
+    return;
+  }
+  if (locale === "fr" || locale === "en") {
+    throw new Error(`Missing base legal catalog for locale "${locale}".`);
+  }
+
+  const catalogs = await legalCatalogLoaders[legalLocaleGroups[locale]]();
+  const documentsForLocale = catalogs[locale];
+  if (!documentsForLocale) {
+    throw new Error(`Missing legal catalog for locale "${locale}".`);
+  }
+  loadedLegalCatalogs.set(locale, documentsForLocale);
+}
+
 export function getLegalDocument(
   locale: Locale,
   id: LegalDocumentId,
 ): LegalDocument {
-  return documents[locale][id];
+  const localeDocuments = loadedLegalCatalogs.get(locale);
+  if (!localeDocuments) {
+    throw new Error(`Legal catalog for locale "${locale}" is not loaded.`);
+  }
+  const document = localeDocuments[id];
+  if (!document) {
+    throw new Error(`Missing "${id}" legal document for locale "${locale}".`);
+  }
+  return document;
 }

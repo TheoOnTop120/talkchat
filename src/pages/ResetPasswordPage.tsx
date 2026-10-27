@@ -80,11 +80,14 @@ function ResetPasswordPage(props: AppPageProps) {
           <p className="form-error-summary" role="alert">
             {props.t(
               status === "error"
-                ? error ?? "authOperationError"
+                ? (error ?? "authOperationError")
                 : "authResetLinkRequired",
             )}
           </p>
-          <AppLink className="form-submit form-submit-link" to="/forgot-password">
+          <AppLink
+            className="form-submit form-submit-link"
+            to="/forgot-password"
+          >
             {props.t("forgotLink")}
           </AppLink>
         </div>
@@ -116,9 +119,7 @@ function ResetPasswordPage(props: AppPageProps) {
           <PasswordField
             autoComplete="new-password"
             error={
-              errors.confirmation
-                ? props.t(errors.confirmation)
-                : undefined
+              errors.confirmation ? props.t(errors.confirmation) : undefined
             }
             id="confirmation"
             label={props.t("passwordConfirmLabel")}

@@ -1,6 +1,6 @@
-import type { Locale } from "../types/theme";
+import type { Locale } from "./locales";
 
-export const messages = {
+const baseMessages = {
   fr: {
     skipLink: "Aller au contenu",
     home: "Accueil",
@@ -13,6 +13,8 @@ export const messages = {
     primaryNavigation: "Navigation principale",
     brandHome: "TalkChat — accueil",
     pageTitle: "TalkChat — Les conversations qui rapprochent",
+    pageDescription:
+      "TalkChat — un espace simple et chaleureux pour rester en contact.",
     themeLight: "Activer le thème clair",
     themeDark: "Activer le thème sombre",
     language: "Langue",
@@ -51,6 +53,10 @@ export const messages = {
     loginSubmit: "Se connecter",
     loginLoading: "Connexion…",
     signOut: "Se déconnecter",
+    catalogLoadError:
+      "La langue sélectionnée n’a pas pu être chargée. Rechargez la page puis réessayez.",
+    legalTranslationNotice:
+      "Cette traduction non officielle d’un brouillon juridique n’a pas été vérifiée par un juriste.",
     authConfigurationMissing:
       "L’authentification n’est pas configurée. Renseignez l’URL Supabase et la clé publique du projet dans la configuration locale.",
     authConfigurationInvalid:
@@ -152,8 +158,7 @@ export const messages = {
     accessDeniedBody:
       "Vous n’avez pas accès à cette page. Une session authentifiée est nécessaire.",
     notFoundTitle: "Cette page est introuvable",
-    notFoundBody:
-      "Le lien est peut-être incorrect ou la page a été déplacée.",
+    notFoundBody: "Le lien est peut-être incorrect ou la page a été déplacée.",
     unavailableTitle: "Cette page n’est pas disponible",
     unavailableBody:
       "Cette page ou ce service n’est pas encore prêt. Aucun service externe n’a été contacté.",
@@ -179,6 +184,7 @@ export const messages = {
     primaryNavigation: "Primary navigation",
     brandHome: "TalkChat — home",
     pageTitle: "TalkChat — Conversations that bring us closer",
+    pageDescription: "TalkChat — a simple, welcoming space to stay in touch.",
     themeLight: "Switch to light theme",
     themeDark: "Switch to dark theme",
     language: "Language",
@@ -217,6 +223,10 @@ export const messages = {
     loginSubmit: "Sign in",
     loginLoading: "Signing in…",
     signOut: "Sign out",
+    catalogLoadError:
+      "The selected language could not be loaded. Please reload and try again.",
+    legalTranslationNotice:
+      "This is an unofficial translation of a legal draft and has not been legally reviewed.",
     authConfigurationMissing:
       "Authentication is not configured. Set the Supabase project URL and public key in the local configuration.",
     authConfigurationInvalid:
@@ -326,8 +336,99 @@ export const messages = {
   },
 } as const;
 
-export type MessageKey = keyof (typeof messages)["fr"];
+export type MessageKey = keyof (typeof baseMessages)["fr"];
+
+type MessageCatalog = Record<MessageKey, string>;
+
+const loadedCatalogs = new Map<Locale, MessageCatalog>([
+  ["fr", baseMessages.fr],
+  ["en", baseMessages.en],
+]);
+
+const catalogLoaders = {
+  groupA: () => import("./catalogs/groupA.ts").then(({ groupA }) => groupA),
+  groupB: () => import("./catalogs/groupB.ts").then(({ groupB }) => groupB),
+  groupC: () => import("./catalogs/groupC.ts").then(({ groupC }) => groupC),
+  groupD: () => import("./catalogs/groupD.ts").then(({ groupD }) => groupD),
+};
+
+const localeGroups = {
+  nl: "groupA",
+  de: "groupA",
+  es: "groupA",
+  pt: "groupA",
+  it: "groupA",
+  pl: "groupA",
+  uk: "groupA",
+  ru: "groupA",
+  tr: "groupA",
+  ar: "groupA",
+  he: "groupB",
+  fa: "groupB",
+  ur: "groupB",
+  hi: "groupB",
+  bn: "groupB",
+  "zh-Hans": "groupB",
+  "zh-Hant": "groupB",
+  ja: "groupB",
+  ko: "groupB",
+  id: "groupB",
+  vi: "groupC",
+  th: "groupC",
+  sv: "groupC",
+  nb: "groupC",
+  da: "groupC",
+  fi: "groupC",
+  el: "groupC",
+  ro: "groupC",
+  cs: "groupC",
+  sk: "groupC",
+  hu: "groupD",
+  bg: "groupD",
+  hr: "groupD",
+  "sr-Latn": "groupD",
+  sl: "groupD",
+  lt: "groupD",
+  lv: "groupD",
+  et: "groupD",
+  ca: "groupD",
+} as const satisfies Record<
+  Exclude<Locale, "fr" | "en">,
+  keyof typeof catalogLoaders
+>;
+
+export const messageLocales = ["fr", "en", ...Object.keys(localeGroups)];
+
+export async function loadMessageCatalog(locale: Locale): Promise<void> {
+  if (loadedCatalogs.has(locale)) {
+    return;
+  }
+  if (locale === "fr" || locale === "en") {
+    throw new Error(`Missing base message catalog for locale "${locale}".`);
+  }
+
+  const catalogs: Partial<Record<Locale, MessageCatalog>> =
+    await catalogLoaders[localeGroups[locale]]();
+  const catalog = catalogs[locale];
+  if (!catalog) {
+    throw new Error(`Missing message catalog for locale "${locale}".`);
+  }
+  loadedCatalogs.set(locale, catalog);
+}
+
+export function getMessageCatalog(locale: Locale): Readonly<MessageCatalog> {
+  const catalog = loadedCatalogs.get(locale);
+  if (!catalog) {
+    throw new Error(`Message catalog for locale "${locale}" is not loaded.`);
+  }
+  return catalog;
+}
 
 export function translate(locale: Locale, key: MessageKey): string {
-  return messages[locale][key];
+  const catalog = getMessageCatalog(locale);
+  const translation = catalog[key];
+  if (typeof translation !== "string" || translation.length === 0) {
+    throw new Error(`Missing translation for "${key}" in locale "${locale}".`);
+  }
+  return translation;
 }

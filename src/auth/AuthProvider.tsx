@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<AuthContextValue["error"]>(
     supabase
       ? null
-      : supabaseConfigurationError ?? "authConfigurationMissing",
+      : (supabaseConfigurationError ?? "authConfigurationMissing"),
   );
 
   useEffect(() => {

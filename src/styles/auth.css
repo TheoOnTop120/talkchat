@@ -136,11 +136,11 @@
   display: grid;
   gap: 0.5rem;
   margin: 0.6rem 0 0;
-  padding-left: 1.25rem;
+  padding-inline-start: 1.25rem;
 }
 
 .legal-sections li {
-  padding-left: 0.15rem;
+  padding-inline-start: 0.15rem;
 }
 
 .legal-related {
@@ -176,6 +176,10 @@
   gap: 0.45rem;
   margin-top: 1.5rem;
   font-size: 0.82rem;
+}
+
+html[dir="rtl"] .legal-back-link > span {
+  transform: scaleX(-1);
 }
 
 .legal-footer-links {
@@ -294,16 +298,17 @@
 
 .password-input-wrap {
   position: relative;
+  direction: ltr;
 }
 
 .password-input-wrap .text-input {
-  padding-right: 6.3rem;
+  padding-inline-end: 6.3rem;
 }
 
 .password-visibility {
   position: absolute;
   top: 50%;
-  right: 0.45rem;
+  inset-inline-end: 0.45rem;
   padding: 0.38rem 0.45rem;
   transform: translateY(-50%);
   border: 0;

@@ -39,6 +39,7 @@ function PasswordField({
           aria-invalid={Boolean(error)}
           autoComplete={autoComplete}
           className="text-input"
+          dir="ltr"
           id={id}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}

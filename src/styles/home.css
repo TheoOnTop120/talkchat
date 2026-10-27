@@ -52,7 +52,7 @@
   position: fixed;
   z-index: 10;
   top: 0.75rem;
-  left: 0.75rem;
+  inset-inline-start: 0.75rem;
   padding: 0.75rem 1rem;
   transform: translateY(-150%);
   border-radius: 0.75rem;
@@ -121,7 +121,7 @@ main,
 
 .main-nav {
   gap: 2.3rem;
-  margin-left: 3rem;
+  margin-inline-start: 3rem;
 }
 
 .nav-link {
@@ -140,9 +140,9 @@ main,
 
 .nav-link.active::after {
   position: absolute;
-  right: 0;
+  inset-inline-end: 0;
   bottom: -1.55rem;
-  left: 0;
+  inset-inline-start: 0;
   height: 2px;
   border-radius: 2px;
   background: var(--accent);
@@ -452,7 +452,7 @@ p {
 
 .avatar-sun > i {
   position: absolute;
-  right: -1px;
+  inset-inline-end: -1px;
   bottom: 0;
   width: 10px;
   height: 10px;
@@ -485,7 +485,7 @@ p {
 }
 
 .conversation-more {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .message-area {
@@ -604,7 +604,7 @@ p {
 
 .floating-badge {
   position: absolute;
-  right: -0.7rem;
+  inset-inline-end: -0.7rem;
   bottom: 2.8rem;
   display: flex;
   align-items: center;
@@ -786,7 +786,7 @@ p {
 
   .main-nav {
     gap: 1.3rem;
-    margin-left: 1rem;
+    margin-inline-start: 1rem;
   }
 
   .hero {
@@ -809,7 +809,7 @@ p {
   }
 
   .floating-badge {
-    right: -0.2rem;
+    inset-inline-end: -0.2rem;
     bottom: 1.7rem;
   }
 
@@ -909,7 +909,7 @@ p {
   }
 
   .floating-badge {
-    right: 0;
+    inset-inline-end: 0;
     bottom: 0.8rem;
   }
 
@@ -990,7 +990,7 @@ p {
   }
 
   .floating-badge {
-    right: -0.25rem;
+    inset-inline-end: -0.25rem;
     font-size: 0.62rem;
   }
 }

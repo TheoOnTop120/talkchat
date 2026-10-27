@@ -90,12 +90,7 @@ export function AppLink({
   }
 
   return (
-    <a
-      {...props}
-      className={className}
-      href={to}
-      onClick={handleClick}
-    >
+    <a {...props} className={className} href={to} onClick={handleClick}>
       {children}
     </a>
   );
