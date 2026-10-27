@@ -153,7 +153,7 @@ main,
   gap: 0.55rem;
 }
 
-.language-select,
+.language-picker-trigger,
 .icon-button {
   display: grid;
   min-width: 40px;
@@ -165,12 +165,187 @@ main,
   background: transparent;
 }
 
-.language-select {
+.language-picker {
+  position: relative;
+}
+
+.language-picker-trigger {
+  display: inline-flex;
+  min-width: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
   padding-inline: 0.55rem;
   border-color: var(--line);
-  font-size: 0.76rem;
-  font-weight: 700;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
   cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.language-picker-trigger:hover,
+.language-picker-trigger[aria-expanded="true"] {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+}
+
+.language-picker-trigger svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.language-picker-panel {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 0.65rem);
+  inset-inline-end: 0;
+  width: min(23rem, calc(100vw - 2rem));
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--small-shadow);
+  animation: language-picker-enter 150ms ease-out both;
+}
+
+.language-picker-search {
+  display: flex;
+  height: 42px;
+  align-items: center;
+  gap: 0.55rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--muted);
+  background: var(--page);
+}
+
+.language-picker-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.language-picker-search svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.language-picker-input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+  font-size: 0.86rem;
+}
+
+.language-picker-input:focus-visible {
+  outline: 0;
+}
+
+.language-picker-options {
+  display: grid;
+  max-height: min(21rem, 52vh);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.2rem;
+  overflow-y: auto;
+  margin-top: 0.65rem;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--line) transparent;
+  scrollbar-width: thin;
+}
+
+.language-picker-option {
+  display: flex;
+  min-width: 0;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease;
+}
+
+.language-picker-option:hover,
+.language-picker-option:focus-visible {
+  background: var(--surface-soft);
+}
+
+.language-picker-option.is-selected {
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
+  background: var(--accent-soft);
+}
+
+.language-picker-option:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.language-picker-option-names {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.12rem;
+  overflow: hidden;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.language-picker-option-secondary {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 400;
+  text-overflow: ellipsis;
+}
+
+.language-picker-check {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: var(--accent-strong);
+}
+
+.language-picker-empty {
+  margin: 0;
+  padding: 1.4rem 0.75rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+@keyframes language-picker-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .icon-button {
@@ -862,10 +1037,17 @@ p {
     gap: 0.35rem;
   }
 
-  .language-select,
+  .language-picker-trigger,
   .icon-button {
     min-width: 38px;
     height: 38px;
+  }
+
+  .language-picker-panel {
+    position: fixed;
+    top: var(--language-picker-top);
+    inset-inline: 1rem;
+    width: auto;
   }
 
   .hero {
