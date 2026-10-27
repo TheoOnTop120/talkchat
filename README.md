@@ -19,6 +19,12 @@ npm run dev
 
 Vite prints the local address in the terminal.
 
+For local Supabase development, create a `.env.local` file from `.env.example`
+and set your Supabase project URL and publishable key. The publishable key is
+intended for browser use; never put a secret or service-role key in frontend
+environment variables. The Supabase client is configured, but authentication,
+messaging, and database features are not yet implemented.
+
 ## Checks
 
 ```sh
