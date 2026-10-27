@@ -1,12 +1,5 @@
-import { useEffect, useState } from "react";
-import HomePage from "./pages/HomePage";
-import LegalPage from "./pages/LegalPage";
-import LoginPage from "./pages/LoginPage";
-import ProblemPage from "./pages/ProblemPage";
-import RecoveryPage from "./pages/RecoveryPage";
-import RegisterPage from "./pages/RegisterPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import VerificationPage from "./pages/VerificationPage";
+import { lazy, Suspense, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { RouterProvider } from "./routing/Router";
 import { useRouter } from "./routing/useRouter";
 import { loadMessageCatalog, translate } from "./i18n/messages";
@@ -20,6 +13,15 @@ import {
   getInitialLocale,
   saveLocale,
 } from "./i18n/locales";
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const LegalPage = lazy(() => import("./pages/LegalPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const ProblemPage = lazy(() => import("./pages/ProblemPage"));
+const RecoveryPage = lazy(() => import("./pages/RecoveryPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
+const VerificationPage = lazy(() => import("./pages/VerificationPage"));
 
 function RoutedApp() {
   const { pathname } = useRouter();
@@ -92,6 +94,7 @@ function RoutedApp() {
     onThemeToggle: toggleTheme,
   };
 
+  let page: ReactNode;
   if (catalogLoadError) {
     return <main role="alert">{translate("en", "catalogLoadError")}</main>;
   }
@@ -101,44 +104,66 @@ function RoutedApp() {
 
   switch (pathname) {
     case "/":
-      return <HomePage {...pageProps} />;
+      page = <HomePage {...pageProps} />;
+      break;
     case "/login":
-      return <LoginPage {...pageProps} />;
+      page = <LoginPage {...pageProps} />;
+      break;
     case "/register":
-      return <RegisterPage {...pageProps} />;
+      page = <RegisterPage {...pageProps} />;
+      break;
     case "/forgot-password":
-      return <RecoveryPage {...pageProps} />;
+      page = <RecoveryPage {...pageProps} />;
+      break;
     case "/reset-password":
-      return <ResetPasswordPage {...pageProps} />;
+      page = <ResetPasswordPage {...pageProps} />;
+      break;
     case "/verify-email":
-      return <VerificationPage {...pageProps} />;
+      page = <VerificationPage {...pageProps} />;
+      break;
     case "/legal/terms":
-      return <LegalPage {...pageProps} documentId="terms" />;
+      page = <LegalPage {...pageProps} documentId="terms" />;
+      break;
     case "/legal/privacy":
-      return <LegalPage {...pageProps} documentId="privacy" />;
+      page = <LegalPage {...pageProps} documentId="privacy" />;
+      break;
     case "/legal/community":
-      return <LegalPage {...pageProps} documentId="community" />;
+      page = <LegalPage {...pageProps} documentId="community" />;
+      break;
     case "/legal/report":
-      return <LegalPage {...pageProps} documentId="report" />;
+      page = <LegalPage {...pageProps} documentId="report" />;
+      break;
     case "/legal/security":
-      return <LegalPage {...pageProps} documentId="security" />;
+      page = <LegalPage {...pageProps} documentId="security" />;
+      break;
     case "/error":
-      return <ProblemPage {...pageProps} kind="error" pathname={pathname} />;
+      page = <ProblemPage {...pageProps} kind="error" pathname={pathname} />;
+      break;
     case "/access-denied":
-      return <ProblemPage {...pageProps} kind="access" pathname={pathname} />;
+      page = <ProblemPage {...pageProps} kind="access" pathname={pathname} />;
+      break;
     case "/unavailable":
-      return (
+      page = (
         <ProblemPage {...pageProps} kind="unavailable" pathname={pathname} />
       );
+      break;
     case "/not-found":
-      return (
+      page = (
         <ProblemPage {...pageProps} kind="not-found" pathname={pathname} />
       );
+      break;
     default:
-      return (
+      page = (
         <ProblemPage {...pageProps} kind="not-found" pathname={pathname} />
       );
+      break;
   }
+
+  return (
+    <Suspense fallback={<main aria-busy="true">TalkChat</main>}>
+      {page}
+    </Suspense>
+  );
 }
 
 function App() {

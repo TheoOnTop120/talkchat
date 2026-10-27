@@ -1,17 +1,51 @@
+<div align="center">
+
 # TalkChat
 
-TalkChat is a React and TypeScript starter for a responsive messaging app. This
-initial stage contains a landing page, a light/dark theme toggle, a localized
-French/English interface expanded to 41 languages, and a web app manifest.
-Account authentication is provided by Supabase Auth; messaging and chat storage
-are not implemented.
+**A modern, multilingual and accessible foundation for a messaging application.**
+
+![React](https://img.shields.io/badge/React-TypeScript-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-build-646CFF?logo=vite&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Auth-3ECF8E?logo=supabase&logoColor=white)
+![i18n](https://img.shields.io/badge/languages-41-blueviolet)
+![PWA](https://img.shields.io/badge/PWA-manifest-5A0FC8)
+![Status](https://img.shields.io/badge/status-prototype-orange)
+
+[Quick start](#quick-start) |
+[Features](#features) |
+[Authentication](#authentication) |
+[Internationalization](#internationalization) |
+[Project structure](#project-structure)
+
+</div>
+
+---
+
+## Overview
+
+TalkChat is a **React and TypeScript starter** for a responsive messaging app. This first stage lays the groundwork: a landing page, a light/dark theme toggle, a localized interface available in **41 languages**, a web app manifest, and **account authentication through Supabase Auth**.
+
+> [!IMPORTANT]
+> **TalkChat does not implement messaging yet.** There is no chat storage, no message or profile tables, and no server-side authorization policies. The landing page call-to-action is intentionally inactive until product flows are designed.
+
+## Features
+
+| Feature | Details |
+|---|---|
+| **Light / dark theme** | The only UI preference TalkChat stores locally |
+| **41 languages** | On-demand catalogs, RTL support, `Intl` for dates, numbers and plurals |
+| **Authentication** | Sign-up, sign-in, session restoration, sign-out, email confirmation, password recovery |
+| **Dependency-free routing** | Built directly on the browser History API |
+| **Lazy loading** | Route-based page splitting, Supabase SDK imported asynchronously |
+| **PWA-ready** | Manifest in place; service worker and offline caching not configured yet |
+| **Legal pages** | Five multilingual working drafts (see [Legal pages](#legal-pages)) |
 
 ## Requirements
 
-- Node.js 24 or newer
-- npm 11 or newer
+- **Node.js** 24 or newer
+- **npm** 11 or newer
 
-## Local development
+## Quick start
 
 ```sh
 npm install
@@ -20,19 +54,19 @@ npm run dev
 
 Vite prints the local address in the terminal.
 
-For local Supabase development, create a `.env.local` file from `.env.example`
-and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Only the
-publishable key is intended for browser use; never put a secret or service-role
-key in frontend environment variables. Without valid public configuration the
-application remains usable and displays a translated authentication warning.
+### Supabase configuration
 
-Authentication uses Supabase Auth for account creation, sign-in, session
-restoration, sign-out, email confirmation, and password recovery. The frontend
-uses fixed same-origin callback paths (`/verify-email` and `/reset-password`);
-add those paths to the Supabase project's allowed redirect URLs for each
-deployment. Email delivery and SMTP configuration are external and have not
-been verified. No message/profile tables, messaging feature, or server-side
-authorization policies are provided by this frontend.
+For local Supabase development, create a `.env.local` file from `.env.example` and set:
+
+```sh
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_PUBLISHABLE_KEY=...
+```
+
+> [!WARNING]
+> Only the **publishable key** is intended for browser use. Never put a secret or service-role key in frontend environment variables.
+
+Without valid public configuration, the application remains usable and displays a translated authentication warning.
 
 ## Checks
 
@@ -41,6 +75,104 @@ npm run lint
 npm run build
 node --experimental-strip-types --test tests/i18n.test.mjs
 ```
+
+## Authentication
+
+Authentication uses **Supabase Auth**. Public forms call the Supabase Auth SDK: email and password are sent to the configured Supabase project, and the display name is attached as user metadata. Birth date and terms acceptance are validated locally and are **not sent**. The SDK manages session storage and auth tokens.
+
+Password recovery returns a generic response to avoid revealing whether an email address belongs to an account.
+
+### Redirect URLs
+
+The frontend uses fixed same-origin callback paths. Add them to the Supabase project's allowed redirect URLs for each deployment:
+
+- `/verify-email`
+- `/reset-password`
+
+> [!NOTE]
+> Email delivery, SMTP configuration, email templates and the redirect allowlist depend on the remote Supabase project. These settings are neither inspected nor changed here, and email delivery has not been verified.
+
+### Route protection
+
+The reusable `RequireAuth` component is available for future private routes. It is a **frontend navigation guard only** and does not replace server-side authorization or Supabase RLS.
+
+### Available routes
+
+| Category | Routes |
+|---|---|
+| **Authentication** | `/login`, `/register`, `/forgot-password`, `/verify-email`, `/reset-password` |
+| **States** | `/error`, `/access-denied`, `/unavailable`, `/not-found` |
+| **Legal** | `/legal/terms`, `/legal/privacy`, `/legal/community`, `/legal/report`, `/legal/security` |
+
+Unknown paths show the not-found page. The `/error`, `/access-denied` and `/unavailable` pages are presentational states for future flows.
+
+## Internationalization
+
+The interface supports **41 languages**:
+
+<details>
+<summary><b>Show the full list</b></summary>
+
+| Code | Language | Code | Language |
+|---|---|---|---|
+| `fr` | French | `en` | English |
+| `nl` | Dutch | `de` | German |
+| `es` | Spanish | `pt` | Portuguese |
+| `it` | Italian | `pl` | Polish |
+| `uk` | Ukrainian | `ru` | Russian |
+| `tr` | Turkish | `ar` | Arabic |
+| `he` | Hebrew | `fa` | Persian |
+| `hi` | Hindi | `bn` | Bengali |
+| `ur` | Urdu | `zh-Hans` | Simplified Chinese |
+| `zh-Hant` | Traditional Chinese | `ja` | Japanese |
+| `ko` | Korean | `id` | Indonesian |
+| `vi` | Vietnamese | `th` | Thai |
+| `sv` | Swedish | `nb` | Norwegian Bokmal |
+| `da` | Danish | `fi` | Finnish |
+| `el` | Greek | `ro` | Romanian |
+| `cs` | Czech | `sk` | Slovak |
+| `hu` | Hungarian | `bg` | Bulgarian |
+| `hr` | Croatian | `sr-Latn` | Serbian (Latin script) |
+| `sl` | Slovenian | `lt` | Lithuanian |
+| `lv` | Latvian | `et` | Estonian |
+| `ca` | Catalan | | |
+
+</details>
+
+### Behavior
+
+- Native language selector with **keyboard type-ahead**.
+- The selected language is persisted separately as `talkchat-locale`. On a first visit, TalkChat detects a supported browser language and otherwise starts in French.
+- Language catalogs are **loaded on demand** by locale group.
+- **RTL** direction is set on the document root for Arabic, Hebrew, Persian and Urdu.
+- Dates, numbers and plural categories use the browser's `Intl` APIs.
+- Language choices apply immediately across the current client-side navigation.
+
+The language preference is local to the browser and is not synchronized to a remote account profile, since TalkChat does not yet have a profile preference field.
+
+> [!NOTE]
+> Only TalkChat-provided interface copy is localized. User-authored messages, names, profile descriptions, attachments, captions and transcriptions are not translated, sent to a translation service, or modified when the interface language changes.
+
+### Adding a locale
+
+1. Add its BCP 47 code, native name and text direction to `src/i18n/locales.ts`.
+2. Add every `MessageKey` to a catalog group.
+3. Map the locale to that group in `src/i18n/messages.ts`.
+4. Add translated legal documents.
+5. Run the i18n test to check catalog parity, persistence, direction, formatting and message-key behavior.
+
+Keep all catalogs complete: missing keys intentionally throw instead of silently showing another language.
+
+Interface catalogs live in `src/i18n/messages.ts` and `src/i18n/catalogs/`. Legal documents are maintained separately in `src/i18n/legal.ts` and its legal catalogs.
+
+## Legal pages
+
+The five `/legal/*` pages contain **multilingual working drafts** and prototype information, not reviewed legal terms or a compliance guarantee.
+
+- Non-French translations are explicitly marked as unofficial and unreviewed.
+- No operator is identified and no contact details are invented.
+- Collection purposes, legal bases, recipients, retention periods and applicable rights remain to be defined and reviewed before any public launch.
+- There is no working report submission channel and no implemented moderation system.
 
 ## Project structure
 
@@ -53,95 +185,17 @@ src/
   styles/         Global and page styles
   types/          Shared TypeScript types
   utils/          Small reusable helpers
+tests/            Tests (including i18n)
 ```
 
-The current homepage is a visual placeholder. Its call-to-action is intentionally
-inactive until product flows are designed. The manifest prepares the app for a
-future PWA; offline caching and a service worker are not configured yet.
+## Status and roadmap
 
-## Authentication
-
-The frontend currently includes these client-side routes:
-
-- `/login`
-- `/register`
-- `/forgot-password`
-- `/verify-email`
-- `/reset-password`
-- `/error`
-- `/access-denied`
-- `/unavailable`
-- `/not-found`
-- `/legal/terms`
-- `/legal/privacy`
-- `/legal/community`
-- `/legal/report`
-- `/legal/security`
-
-Unknown paths show the not-found page. Public authentication forms call the
-Supabase Auth SDK. Email/password credentials are sent to the configured
-Supabase project; display name is attached as user metadata. Birth date and
-terms acceptance are validated locally and are not sent. Supabase's SDK
-manages session storage and auth tokens. Recovery uses a generic response to
-avoid revealing whether an email address belongs to an account.
-
-Email confirmation and password recovery depend on the remote project's auth
-settings, email templates, SMTP delivery, and redirect allowlist. These remote
-settings are not inspected or changed here. The reusable `RequireAuth`
-component is available for future private routes; it is a frontend navigation
-guard only and does not replace server-side authorization or Supabase RLS.
-
-The `/error`, `/access-denied`, and `/unavailable` pages are presentational
-states for future flows. The five `/legal/*` pages contain multilingual working
-drafts and prototype information, not reviewed legal terms or a compliance
-guarantee. Non-French legal translations are explicitly marked as unofficial
-and unreviewed.
-They do not
-identify an operator or invent contact details. Actual collection purposes,
-legal bases, recipients, retention periods, and applicable rights remain to be
-defined and reviewed before any public launch. There is no working report
-submission channel or implemented moderation system.
-
-Navigation uses the browser History API directly, so no routing dependency is
-required. Language choices apply immediately across the current client-side
-navigation and default to French on a fresh load. The theme preference is the
-only UI preference saved locally by TalkChat; Supabase Auth manages its own
-session persistence in the browser.
-
-## Internationalization
-
-The interface supports French (`fr`), English (`en`), Dutch (`nl`), German
-(`de`), Spanish (`es`), Portuguese (`pt`), Italian (`it`), Polish (`pl`),
-Ukrainian (`uk`), Russian (`ru`), Turkish (`tr`), Arabic (`ar`), Hebrew (`he`),
-Persian (`fa`), Hindi (`hi`), Bengali (`bn`), Urdu (`ur`), Simplified Chinese
-(`zh-Hans`), Traditional Chinese (`zh-Hant`), Japanese (`ja`), Korean (`ko`),
-Indonesian (`id`), Vietnamese (`vi`), Thai (`th`), Swedish (`sv`), Norwegian
-Bokmål (`nb`), Danish (`da`), Finnish (`fi`), Greek (`el`), Romanian (`ro`),
-Czech (`cs`), Slovak (`sk`), Hungarian (`hu`), Bulgarian (`bg`), Croatian
-(`hr`), Serbian in Latin script (`sr-Latn`), Slovenian (`sl`), Lithuanian
-(`lt`), Latvian (`lv`), Estonian (`et`), and Catalan (`ca`).
-
-The native language selector supports keyboard type-ahead. The selected
-language is persisted separately as `talkchat-locale`; on a first visit,
-TalkChat detects a supported browser language and otherwise starts in French.
-Language catalogs are loaded on demand by locale group. RTL direction is set
-on the document root for Arabic, Hebrew, Persian, and Urdu. Dates, numbers, and
-plural categories use the browser's `Intl` APIs.
-
-The language preference is local to this browser and is not synchronized to a
-remote account profile; TalkChat does not yet have a profile preference field.
-
-Interface catalogs live in `src/i18n/messages.ts` and `src/i18n/catalogs/`;
-legal documents are maintained separately in `src/i18n/legal.ts` and its legal
-catalogs. To add a locale, add its BCP 47 code, native name, and text direction
-to `src/i18n/locales.ts`, add every `MessageKey` to a catalog group, map the
-locale to that group in `src/i18n/messages.ts`, and add translated legal
-documents. Keep all catalogs complete: missing keys intentionally throw
-instead of silently showing another language. Run the i18n test command above
-to check catalog parity, persistence, direction, formatting, and message-key
-behavior.
-
-Only TalkChat-provided interface copy is localized. User-authored messages,
-names, profile descriptions, attachments, captions, and transcriptions are not
-translated, sent to a translation service, or modified when the interface
-language changes. TalkChat does not yet implement messaging.
+- [x] Landing page and light/dark theme
+- [x] Interface in 41 languages
+- [x] Supabase authentication (sign-up, sign-in, confirmation, recovery)
+- [x] Web app manifest
+- [ ] Messaging and chat storage
+- [ ] Profile tables and server-side RLS policies
+- [ ] Service worker and offline caching
+- [ ] Legal review of the legal pages
+- [ ] Report channel and moderation

@@ -1,7 +1,6 @@
 import type { AuthError } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { MessageKey } from "../i18n/messages";
-import { supabase, supabaseConfigurationError } from "../utils/supabase";
 
 export class AuthServiceError extends Error {
   readonly messageKey: MessageKey;
@@ -60,13 +59,17 @@ export function getAuthErrorKey(error: unknown): MessageKey {
 async function runAuthOperation(
   operation: (client: SupabaseClient) => Promise<{ error: AuthError | null }>,
 ): Promise<void> {
-  if (!supabase) {
-    throw new AuthServiceError(
-      supabaseConfigurationError ?? "authConfigurationMissing",
-    );
-  }
-
   try {
+    const { getSupabaseClient, supabaseConfigurationError } = await import(
+      "../utils/supabase"
+    );
+    const supabase = await getSupabaseClient();
+    if (!supabase) {
+      throw new AuthServiceError(
+        supabaseConfigurationError ?? "authConfigurationMissing",
+      );
+    }
+
     const result = await operation(supabase);
     if (result.error) {
       throw result.error;
