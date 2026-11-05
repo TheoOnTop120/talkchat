@@ -2,11 +2,11 @@
 
 # TalkChat
 
-**A modern, multilingual and accessible foundation for a messaging application.**
+**A modern, multilingual and accessible messaging application.**
 
 ![React](https://img.shields.io/badge/React-TypeScript-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-build-646CFF?logo=vite&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-Auth-3ECF8E?logo=supabase&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Realtime-3ECF8E?logo=supabase&logoColor=white)
 ![i18n](https://img.shields.io/badge/languages-41-blueviolet)
 ![PWA](https://img.shields.io/badge/PWA-manifest-5A0FC8)
 ![Status](https://img.shields.io/badge/status-prototype-orange)
@@ -23,10 +23,9 @@
 
 ## Overview
 
-TalkChat is a **React and TypeScript starter** for a responsive messaging app. This first stage lays the groundwork: a landing page, a light/dark theme toggle, a localized interface available in **41 languages**, a web app manifest, and **account authentication through Supabase Auth**.
+TalkChat is a **React and TypeScript messaging application** with a responsive inbox, direct conversations, optimistic message sending, and Supabase Realtime updates. Its interface is available in **41 languages**, with account authentication through Supabase Auth.
 
-> [!IMPORTANT]
-> **TalkChat does not implement messaging yet.** There is no chat storage, no message or profile tables, and no server-side authorization policies. The landing page call-to-action is intentionally inactive until product flows are designed.
+The public landing page remains available to signed-out visitors. Signed-in users see their inbox at `/` and can start direct conversations by searching for a username.
 
 ## Features
 
@@ -35,6 +34,8 @@ TalkChat is a **React and TypeScript starter** for a responsive messaging app. T
 | **Light / dark theme** | The only UI preference TalkChat stores locally |
 | **41 languages** | On-demand catalogs, RTL support, `Intl` for dates, numbers and plurals |
 | **Authentication** | Sign-up, sign-in, session restoration, sign-out, email confirmation, password recovery |
+| **Direct messaging** | Username search, conversation list, message history, optimistic sending and realtime updates |
+| **Chat security** | Supabase tables with row-level security; only conversation participants can read its messages |
 | **Dependency-free routing** | Built directly on the browser History API |
 | **Lazy loading** | Route-based page splitting, Supabase SDK imported asynchronously |
 | **PWA-ready** | Manifest in place; service worker and offline caching not configured yet |
@@ -56,7 +57,7 @@ Vite prints the local address in the terminal.
 
 ### Supabase configuration
 
-For local Supabase development, create a `.env.local` file from `.env.example` and set:
+For local Supabase development, create a `.env.local` file and set:
 
 ```sh
 VITE_SUPABASE_URL=...
@@ -67,6 +68,12 @@ VITE_SUPABASE_PUBLISHABLE_KEY=...
 > Only the **publishable key** is intended for browser use. Never put a secret or service-role key in frontend environment variables.
 
 Without valid public configuration, the application remains usable and displays a translated authentication warning.
+
+### Set up chat storage
+
+Run `supabase/migrations/20261105000000_chat_storage.sql` in the Supabase SQL Editor. It creates profiles when users sign up, the conversation and message tables, RLS policies, and the `get_or_create_direct_conversation` RPC. The migration also adds `messages` to the `supabase_realtime` publication when that publication is available.
+
+In the Supabase Dashboard, open **Database > Publications**, verify that `messages` is enabled for `supabase_realtime`, and enable it there if necessary. Both steps are needed on the project before messaging can be tested. Usernames are generated from the signup display name, normalized to lowercase letters, numbers and underscores; users can search by the resulting exact username.
 
 ## Checks
 
@@ -94,13 +101,14 @@ The frontend uses fixed same-origin callback paths. Add them to the Supabase pro
 
 ### Route protection
 
-The reusable `RequireAuth` component is available for future private routes. It is a **frontend navigation guard only** and does not replace server-side authorization or Supabase RLS.
+The inbox and `/chat/<conversation-id>` require an authenticated session. `RequireAuth` protects navigation in the client; Supabase RLS is the actual data boundary and remains effective regardless of frontend routing.
 
 ### Available routes
 
 | Category | Routes |
 |---|---|
 | **Authentication** | `/login`, `/register`, `/forgot-password`, `/verify-email`, `/reset-password` |
+| **Messaging** | `/` (signed-in inbox), `/chat/<conversation-id>` |
 | **States** | `/error`, `/access-denied`, `/unavailable`, `/not-found` |
 | **Legal** | `/legal/terms`, `/legal/privacy`, `/legal/community`, `/legal/report`, `/legal/security` |
 
@@ -148,7 +156,7 @@ The interface supports **41 languages**:
 - Dates, numbers and plural categories use the browser's `Intl` APIs.
 - Language choices apply immediately across the current client-side navigation.
 
-The language preference is local to the browser and is not synchronized to a remote account profile, since TalkChat does not yet have a profile preference field.
+The language preference is local to the browser and is not synchronized to a remote account profile. Profiles currently store a username and optional avatar URL only.
 
 > [!NOTE]
 > Only TalkChat-provided interface copy is localized. User-authored messages, names, profile descriptions, attachments, captions and transcriptions are not translated, sent to a translation service, or modified when the interface language changes.
@@ -181,21 +189,23 @@ public/           Static files and PWA manifest
 src/
   components/     Shared interface components
   i18n/           Locale dictionaries and translation helper
-  pages/          Page-level views
+  pages/          Page-level views, including inbox and chat
+  services/       Supabase authentication and chat requests
   styles/         Global and page styles
-  types/          Shared TypeScript types
+  types/          Shared application and database types
   utils/          Small reusable helpers
 tests/            Tests (including i18n)
 ```
 
-## Status and roadmap
+## Next step
 
 - [x] Landing page and light/dark theme
 - [x] Interface in 41 languages
 - [x] Supabase authentication (sign-up, sign-in, confirmation, recovery)
+- [x] Direct messaging, profiles and server-side RLS policies
 - [x] Web app manifest
-- [ ] Messaging and chat storage
-- [ ] Profile tables and server-side RLS policies
 - [ ] Service worker and offline caching
 - [ ] Legal review of the legal pages
 - [ ] Report channel and moderation
+
+The next implementation step is a service worker with a deliberate offline experience; chat data and authentication tokens should not be cached by a generic offline strategy.

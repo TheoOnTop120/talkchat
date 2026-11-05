@@ -1,11 +1,18 @@
 import SiteHeader from "../components/SiteHeader";
 import LegalFooterLinks from "../components/LegalFooterLinks";
 import AuthConfigurationNotice from "../components/AuthConfigurationNotice";
+import { useAuth } from "../auth/useAuth";
+import InboxPage from "./InboxPage";
 import { AppLink } from "../routing/Router";
 import "../styles/home.css";
 import type { AppPageProps } from "../types/app";
 
 function HomePage({ t, ...pageProps }: AppPageProps) {
+  const { status } = useAuth();
+  if (status === "signed-in") {
+    return <InboxPage {...pageProps} t={t} />;
+  }
+
   return (
     <div className="site-shell" data-theme={pageProps.theme}>
       <a className="skip-link" href="#main-content">

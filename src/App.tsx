@@ -15,6 +15,7 @@ import {
 } from "./i18n/locales";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
+const ChatPage = lazy(() => import("./pages/ChatPage"));
 const LegalPage = lazy(() => import("./pages/LegalPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const ProblemPage = lazy(() => import("./pages/ProblemPage"));
@@ -95,6 +96,7 @@ function RoutedApp() {
   };
 
   let page: ReactNode;
+  const chatRoute = pathname.match(/^\/chat\/([0-9a-f-]{36})$/i);
   if (catalogLoadError) {
     return <main role="alert">{translate("en", "catalogLoadError")}</main>;
   }
@@ -102,7 +104,9 @@ function RoutedApp() {
     return <main aria-busy="true">TalkChat</main>;
   }
 
-  switch (pathname) {
+  if (chatRoute) {
+    page = <ChatPage {...pageProps} conversationId={chatRoute[1]} />;
+  } else switch (pathname) {
     case "/":
       page = <HomePage {...pageProps} />;
       break;

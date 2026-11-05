@@ -162,17 +162,19 @@ function SiteHeader({
         <span className="brand-name">TalkChat</span>
       </AppLink>
 
-      <nav aria-label={t("primaryNavigation")} className="main-nav">
-        <AppLink className="nav-link" to="/">
-          {t("home")}
-        </AppLink>
-        <AppLink className="nav-link" to="/#features">
-          {t("features")}
-        </AppLink>
-        <AppLink className="nav-link" to="/#about">
-          {t("about")}
-        </AppLink>
-      </nav>
+      {status !== "signed-in" && (
+        <nav aria-label={t("primaryNavigation")} className="main-nav">
+          <AppLink className="nav-link" to="/">
+            {t("home")}
+          </AppLink>
+          <AppLink className="nav-link" to="/#features">
+            {t("features")}
+          </AppLink>
+          <AppLink className="nav-link" to="/#about">
+            {t("about")}
+          </AppLink>
+        </nav>
+      )}
 
       <div className="header-actions">
         {status === "signed-in" ? (
