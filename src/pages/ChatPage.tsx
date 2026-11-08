@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 import RequireAuth from "../components/RequireAuth";
 import SiteHeader from "../components/SiteHeader";
 import { chatCopy } from "../i18n/chat";
-import { useRouter } from "../routing/useRouter";
+import { useRouter } from "../routing/routerContext";
 import {
   getChatClient,
   getConversationDetails,

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 export type RouterContextValue = {
   pathname: string;
@@ -6,3 +6,13 @@ export type RouterContextValue = {
 };
 
 export const RouterContext = createContext<RouterContextValue | null>(null);
+
+export function useRouter(): RouterContextValue {
+  const context = useContext(RouterContext);
+
+  if (!context) {
+    throw new Error("useRouter must be used inside RouterProvider.");
+  }
+
+  return context;
+}

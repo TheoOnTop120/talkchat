@@ -1,7 +1,36 @@
 import { useState } from "react";
-import FormField from "./FormField";
+import type { ReactNode } from "react";
 import type { MessageKey } from "../i18n/messages";
 import { fieldDescriptionIds } from "../utils/forms";
+
+type FormFieldProps = {
+  id: string;
+  label: string;
+  error?: string;
+  hint?: string;
+  children: ReactNode;
+};
+
+export function FormField({ id, label, error, hint, children }: FormFieldProps) {
+  return (
+    <div className="form-field">
+      <label className="field-label" htmlFor={id}>
+        {label}
+      </label>
+      {children}
+      {hint && (
+        <p className="field-hint" id={`${id}-hint`}>
+          {hint}
+        </p>
+      )}
+      {error && (
+        <p className="field-error" id={`${id}-error`} role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
 type PasswordFieldProps = {
   id: string;
@@ -15,7 +44,7 @@ type PasswordFieldProps = {
   autoComplete: "current-password" | "new-password";
 };
 
-function PasswordField({
+export function PasswordField({
   id,
   label,
   placeholder,
@@ -59,5 +88,3 @@ function PasswordField({
     </FormField>
   );
 }
-
-export default PasswordField;

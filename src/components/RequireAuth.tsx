@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 import type { MessageKey } from "../i18n/messages";
-import { useRouter } from "../routing/useRouter";
-import { useAuth } from "../auth/useAuth";
+import { useRouter } from "../routing/routerContext";
+import { useAuth } from "../auth/AuthContext";
 
 type RequireAuthProps = {
   children: ReactNode;

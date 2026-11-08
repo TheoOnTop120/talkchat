@@ -1,10 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import AuthLayout from "../components/AuthLayout";
-import FormField from "../components/FormField";
-import PasswordField from "../components/PasswordField";
+import { FormField, PasswordField } from "../components/FormFields";
 import { AppLink } from "../routing/Router";
-import { useRouter } from "../routing/useRouter";
+import { useRouter } from "../routing/routerContext";
 import type { MessageKey } from "../i18n/messages";
 import type { AppPageProps } from "../types/app";
 import { fieldDescriptionIds } from "../utils/forms";
@@ -13,8 +12,8 @@ import {
   isValidBirthDate,
   passwordRules,
   validateEmail,
-} from "../utils/validation";
-import { useAuth } from "../auth/useAuth";
+} from "../utils/forms";
+import { useAuth } from "../auth/AuthContext";
 import { getAuthErrorKey } from "../services/auth";
 
 function RegisterPage(props: AppPageProps) {

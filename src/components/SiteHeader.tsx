@@ -7,7 +7,7 @@ import type {
   CSSProperties,
   KeyboardEvent as ReactKeyboardEvent,
 } from "react";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 import { getAuthErrorKey } from "../services/auth";
 import { locales } from "../i18n/locales";
 

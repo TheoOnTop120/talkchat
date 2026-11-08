@@ -1,5 +1,5 @@
 import type { AppPageProps } from "../types/app";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 
 function AuthConfigurationNotice({ t }: Pick<AppPageProps, "t">) {
   const { status, error } = useAuth();

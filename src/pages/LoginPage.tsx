@@ -1,16 +1,14 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import AuthLayout from "../components/AuthLayout";
-import FormField from "../components/FormField";
-import PasswordField from "../components/PasswordField";
+import { FormField, PasswordField } from "../components/FormFields";
 import { AppLink } from "../routing/Router";
 import type { AppPageProps } from "../types/app";
 import type { MessageKey } from "../i18n/messages";
-import { fieldDescriptionIds } from "../utils/forms";
-import { validateEmail } from "../utils/validation";
-import { useAuth } from "../auth/useAuth";
+import { fieldDescriptionIds, validateEmail } from "../utils/forms";
+import { useAuth } from "../auth/AuthContext";
 import { getAuthErrorKey } from "../services/auth";
-import { useRouter } from "../routing/useRouter";
+import { useRouter } from "../routing/routerContext";
 
 function LoginPage(props: AppPageProps) {
   const { signIn } = useAuth();

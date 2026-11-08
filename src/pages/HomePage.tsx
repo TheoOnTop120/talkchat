@@ -1,7 +1,7 @@
 import SiteHeader from "../components/SiteHeader";
 import LegalFooterLinks from "../components/LegalFooterLinks";
 import AuthConfigurationNotice from "../components/AuthConfigurationNotice";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 import InboxPage from "./InboxPage";
 import { AppLink } from "../routing/Router";
 import "../styles/home.css";

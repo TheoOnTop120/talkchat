@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 import LegalFooterLinks from "../components/LegalFooterLinks";
 import SiteHeader from "../components/SiteHeader";
 import { chatCopy } from "../i18n/chat";
 import { AppLink } from "../routing/Router";
-import { useRouter } from "../routing/useRouter";
+import { useRouter } from "../routing/routerContext";
 import {
   findProfileByUsername,
   getChatClient,

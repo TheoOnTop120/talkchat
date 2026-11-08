@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { MouseEvent, ReactNode } from "react";
 import { RouterContext } from "./routerContext";
-import { useRouter } from "./useRouter";
+import { useRouter } from "./routerContext";
 
 function normalizePathname(pathname: string): string {
   if (pathname === "/") {

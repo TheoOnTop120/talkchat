@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { RouterProvider } from "./routing/Router";
-import { useRouter } from "./routing/useRouter";
+import { useRouter } from "./routing/routerContext";
 import { loadMessageCatalog, translate } from "./i18n/messages";
 import { loadLegalCatalog } from "./i18n/legal";
 import type { MessageKey } from "./i18n/messages";

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import AuthLayout from "../components/AuthLayout";
-import PasswordField from "../components/PasswordField";
+import { PasswordField } from "../components/FormFields";
 import { AppLink } from "../routing/Router";
 import type { MessageKey } from "../i18n/messages";
 import type { AppPageProps } from "../types/app";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 import { getAuthErrorKey } from "../services/auth";
-import { passwordRules } from "../utils/validation";
+import { passwordRules } from "../utils/forms";
 
 function ResetPasswordPage(props: AppPageProps) {
   const { status, error, updatePassword } = useAuth();

@@ -1,14 +1,13 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import AuthLayout from "../components/AuthLayout";
-import FormField from "../components/FormField";
+import { FormField } from "../components/FormFields";
 import { AppLink } from "../routing/Router";
 import type { MessageKey } from "../i18n/messages";
 import type { AppPageProps } from "../types/app";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../auth/AuthContext";
 import { getAuthErrorKey } from "../services/auth";
-import { fieldDescriptionIds } from "../utils/forms";
-import { validateEmail } from "../utils/validation";
+import { fieldDescriptionIds, validateEmail } from "../utils/forms";
 
 function VerificationPage(props: AppPageProps) {
   const { status, session, resendSignupConfirmation } = useAuth();
