@@ -178,13 +178,18 @@ function SiteHeader({
 
       <div className="header-actions">
         {status === "signed-in" ? (
-          <button
-            className="header-signout-link"
-            onClick={handleSignOut}
-            type="button"
-          >
-            {t("signOut")}
-          </button>
+          <>
+            <AppLink className="header-auth-link" to="/profile">
+              {t("profileTitle")}
+            </AppLink>
+            <button
+              className="header-signout-link"
+              onClick={handleSignOut}
+              type="button"
+            >
+              {t("signOut")}
+            </button>
+          </>
         ) : (
           <>
             <AppLink className="header-auth-link" to="/login">

@@ -4,6 +4,7 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 import { useAuth } from "../auth/AuthContext";
 import LegalFooterLinks from "../components/LegalFooterLinks";
 import SiteHeader from "../components/SiteHeader";
+import ProfileAvatar from "../components/ProfileAvatar";
 import { chatCopy } from "../i18n/chat";
 import { AppLink } from "../routing/Router";
 import { useRouter } from "../routing/routerContext";
@@ -29,7 +30,7 @@ function InboxPage({ locale, theme, t, ...pageProps }: AppPageProps) {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState(false);
   const [searchResult, setSearchResult] = useState<
-    Pick<Profile, "id" | "username" | "avatar_url"> | null
+    Pick<Profile, "id" | "username" | "display_name" | "avatar_url"> | null
   >(null);
 
   useEffect(() => {
@@ -165,10 +166,15 @@ function InboxPage({ locale, theme, t, ...pageProps }: AppPageProps) {
             )}
             {searchResult && (
               <div className="contact-result">
-                <span aria-hidden="true" className="contact-avatar">
-                  {searchResult.username.slice(0, 1).toUpperCase()}
+                <ProfileAvatar
+                  className="contact-avatar"
+                  name={searchResult.display_name || searchResult.username}
+                  url={searchResult.avatar_url}
+                />
+                <span className="contact-result-name">
+                  {searchResult.display_name || `@${searchResult.username}`}
+                  {searchResult.display_name && <small>@{searchResult.username}</small>}
                 </span>
-                <span className="contact-result-name">@{searchResult.username}</span>
                 <button
                   disabled={searching}
                   onClick={() => void handleStartConversation(searchResult.id)}
@@ -198,12 +204,16 @@ function InboxPage({ locale, theme, t, ...pageProps }: AppPageProps) {
                   key={preview.conversation.id}
                   to={`/chat/${preview.conversation.id}`}
                 >
-                  <span aria-hidden="true" className="contact-avatar">
-                    {preview.otherUser.username.slice(0, 1).toUpperCase()}
-                  </span>
+                  <ProfileAvatar
+                    className="contact-avatar"
+                    name={preview.otherUser.display_name || preview.otherUser.username}
+                    url={preview.otherUser.avatar_url}
+                  />
                   <span className="conversation-item-copy">
                     <span className="conversation-item-topline">
-                      <strong>@{preview.otherUser.username}</strong>
+                      <strong>
+                        {preview.otherUser.display_name || `@${preview.otherUser.username}`}
+                      </strong>
                       <time dateTime={preview.activityAt}>
                         {timeFormatter.format(new Date(preview.activityAt))}
                       </time>

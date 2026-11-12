@@ -2,7 +2,7 @@ import type { MessageKey } from "../messages";
 
 export const groupD: Record<
   "hu" | "bg" | "hr" | "sr-Latn" | "sl" | "lt" | "lv" | "et" | "ca",
-  Record<MessageKey, string>
+  Partial<Record<MessageKey, string>>
 > = {
   hu: {
     catalogLoadError:

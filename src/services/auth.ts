@@ -20,6 +20,13 @@ export function getAuthErrorKey(error: unknown): MessageKey {
   const message = error instanceof Error ? error.message.toLowerCase() : "";
 
   if (
+    message.includes("email not confirmed") ||
+    message.includes("email_not_confirmed")
+  ) {
+    return "authEmailNotConfirmed";
+  }
+
+  if (
     message.includes("expired") ||
     message.includes("invalid token") ||
     message.includes("invalid link") ||
@@ -34,6 +41,13 @@ export function getAuthErrorKey(error: unknown): MessageKey {
     message.includes("invalid credentials")
   ) {
     return "authCredentialsError";
+  }
+
+  if (
+    message.includes("profiles_username_ci_key") ||
+    message.includes("username is already taken")
+  ) {
+    return "errorUsernameTaken";
   }
 
   if (
@@ -84,14 +98,24 @@ function localRedirect(path: "/verify-email" | "/reset-password"): string {
 }
 
 export function signIn(email: string, password: string): Promise<void> {
-  return runAuthOperation((client) =>
-    client.auth.signInWithPassword({ email: email.trim(), password }),
-  );
+  return runAuthOperation(async (client) => {
+    const result = await client.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (!result.error && !result.data.user.email_confirmed_at) {
+      await client.auth.signOut();
+      throw new AuthServiceError("authEmailNotConfirmed");
+    }
+    return { error: result.error };
+  });
 }
 
 export function signUp(
   displayName: string,
+  username: string,
   email: string,
+  birthDate: string,
   password: string,
 ): Promise<void> {
   return runAuthOperation((client) =>
@@ -100,7 +124,11 @@ export function signUp(
       password,
       options: {
         emailRedirectTo: localRedirect("/verify-email"),
-        data: { display_name: displayName.trim() },
+        data: {
+          display_name: displayName.trim(),
+          username: username.trim().toLowerCase(),
+          birth_date: birthDate,
+        },
       },
     }),
   );

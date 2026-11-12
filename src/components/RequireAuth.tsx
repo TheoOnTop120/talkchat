@@ -16,10 +16,12 @@ function RequireAuth({ children, t }: RequireAuthProps) {
   useEffect(() => {
     if (status === "signed-out") {
       navigate("/login");
+    } else if (status === "email-unconfirmed") {
+      navigate("/verify-email");
     }
   }, [status, navigate]);
 
-  if (status === "signed-out") {
+  if (status === "signed-out" || status === "email-unconfirmed") {
     return null;
   }
   if (status === "loading") {

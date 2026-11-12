@@ -48,7 +48,14 @@ function LoginPage(props: AppPageProps) {
       setPassword("");
       navigate("/");
     } catch (error) {
-      setAuthError(getAuthErrorKey(error));
+      const errorKey = getAuthErrorKey(error);
+      if (errorKey === "authEmailNotConfirmed") {
+        navigate(
+          `/verify-email?unconfirmed=1&email=${encodeURIComponent(email.trim())}`,
+        );
+      } else {
+        setAuthError(errorKey);
+      }
     } finally {
       setLoading(false);
     }

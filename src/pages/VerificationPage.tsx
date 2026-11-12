@@ -11,7 +11,12 @@ import { fieldDescriptionIds, validateEmail } from "../utils/forms";
 
 function VerificationPage(props: AppPageProps) {
   const { status, session, resendSignupConfirmation } = useAuth();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(
+    () =>
+      new URLSearchParams(window.location.search).get("email") ??
+      session?.user.email ??
+      "",
+  );
   const [emailError, setEmailError] = useState<MessageKey>();
   const [authError, setAuthError] = useState<MessageKey | null>(null);
   const [loading, setLoading] = useState(false);
@@ -21,6 +26,8 @@ function VerificationPage(props: AppPageProps) {
     new URLSearchParams(window.location.search).has("error_code");
   const emailConfirmed = Boolean(session?.user.email_confirmed_at);
   const accountReady = status === "signed-in" && !callbackError;
+  const emailUnconfirmed =
+    new URLSearchParams(window.location.search).has("unconfirmed");
 
   async function handleResend(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,7 +84,9 @@ function VerificationPage(props: AppPageProps) {
             {props.t(
               callbackError
                 ? "authInvalidCallback"
-                : requested
+                : emailUnconfirmed
+                  ? "authEmailNotConfirmed"
+                  : requested
                   ? "authEmailLinkRequested"
                   : "authVerifyPending",
             )}

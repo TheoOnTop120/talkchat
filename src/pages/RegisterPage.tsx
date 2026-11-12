@@ -12,6 +12,7 @@ import {
   isValidBirthDate,
   passwordRules,
   validateEmail,
+  validateUsername,
 } from "../utils/forms";
 import { useAuth } from "../auth/AuthContext";
 import { getAuthErrorKey } from "../services/auth";
@@ -20,6 +21,7 @@ function RegisterPage(props: AppPageProps) {
   const { signUp } = useAuth();
   const { navigate } = useRouter();
   const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [password, setPassword] = useState("");
@@ -29,6 +31,7 @@ function RegisterPage(props: AppPageProps) {
     Partial<
       Record<
         | "displayName"
+        | "username"
         | "email"
         | "birthDate"
         | "password"
@@ -49,6 +52,16 @@ function RegisterPage(props: AppPageProps) {
 
     if (displayName.trim().length < 2 || displayName.trim().length > 40) {
       nextErrors.displayName = "errorDisplayName";
+    }
+
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      nextErrors.username =
+        usernameError === "required"
+          ? "errorRequired"
+          : usernameError === "reserved"
+            ? "errorUsernameReserved"
+            : "errorUsernameInvalid";
     }
 
     const emailError = validateEmail(email);
@@ -89,7 +102,7 @@ function RegisterPage(props: AppPageProps) {
 
     setLoading(true);
     try {
-      await signUp(displayName, email, password);
+      await signUp(displayName, username, email, birthDate, password);
       setPassword("");
       setConfirmation("");
       navigate("/verify-email");
@@ -147,6 +160,32 @@ function RegisterPage(props: AppPageProps) {
             placeholder={props.t("displayNamePlaceholder")}
             type="text"
             value={displayName}
+          />
+        </FormField>
+        <FormField
+          error={errors.username ? props.t(errors.username) : undefined}
+          hint={props.t("usernameHint")}
+          id="username"
+          label={props.t("usernameLabel")}
+        >
+          <input
+            aria-describedby={fieldDescriptionIds("username", {
+              error: Boolean(errors.username),
+              hint: true,
+            })}
+            aria-invalid={Boolean(errors.username)}
+            autoCapitalize="none"
+            autoComplete="username"
+            className="text-input"
+            id="username"
+            maxLength={20}
+            onChange={(event) => {
+              setUsername(event.target.value);
+              setErrors((current) => ({ ...current, username: undefined }));
+            }}
+            placeholder="username"
+            type="text"
+            value={username}
           />
         </FormField>
         <FormField

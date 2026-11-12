@@ -3,6 +3,7 @@ import type { FormEvent, KeyboardEvent } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { useAuth } from "../auth/AuthContext";
 import RequireAuth from "../components/RequireAuth";
+import ProfileAvatar from "../components/ProfileAvatar";
 import SiteHeader from "../components/SiteHeader";
 import { chatCopy } from "../i18n/chat";
 import { useRouter } from "../routing/routerContext";
@@ -182,7 +183,7 @@ function ChatPageContent({
       </a>
       <SiteHeader {...pageProps} locale={locale} theme={theme} t={t} />
       <main className="messaging-main chat-main" id="main-content">
-        <section aria-label={details?.otherUser.username ?? "TalkChat"} className="chat-panel">
+        <section aria-label={details?.otherUser.display_name ?? details?.otherUser.username ?? "TalkChat"} className="chat-panel">
           <header className="chat-toolbar">
             <button
               aria-label={chatCopy(locale, "chatBack")}
@@ -203,10 +204,14 @@ function ChatPageContent({
             </button>
             {details && (
               <div className="chat-contact">
-                <span aria-hidden="true" className="contact-avatar">
-                  {details.otherUser.username.slice(0, 1).toUpperCase()}
-                </span>
-                <strong>@{details.otherUser.username}</strong>
+                <ProfileAvatar
+                  className="contact-avatar"
+                  name={details.otherUser.display_name || details.otherUser.username}
+                  url={details.otherUser.avatar_url}
+                />
+                <strong>
+                  {details.otherUser.display_name || `@${details.otherUser.username}`}
+                </strong>
               </div>
             )}
           </header>

@@ -2,7 +2,12 @@ import { createContext, useContext } from "react";
 import type { Session } from "@supabase/supabase-js";
 import type { MessageKey } from "../i18n/messages";
 
-export type AuthStatus = "loading" | "signed-out" | "signed-in" | "error";
+export type AuthStatus =
+  | "loading"
+  | "signed-out"
+  | "email-unconfirmed"
+  | "signed-in"
+  | "error";
 
 export type AuthContextValue = {
   status: AuthStatus;
@@ -12,7 +17,9 @@ export type AuthContextValue = {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (
     displayName: string,
+    username: string,
     email: string,
+    birthDate: string,
     password: string,
   ) => Promise<void>;
   requestPasswordReset: (email: string) => Promise<void>;

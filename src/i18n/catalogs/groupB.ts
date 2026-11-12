@@ -2,7 +2,7 @@ import type { MessageKey } from "../messages";
 
 export const groupB: Record<
   "he" | "fa" | "ur" | "hi" | "bn" | "zh-Hans" | "zh-Hant" | "ja" | "ko" | "id",
-  Record<MessageKey, string>
+  Partial<Record<MessageKey, string>>
 > = {
   he: {
     skipLink: "דילוג לתוכן",

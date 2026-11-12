@@ -49,7 +49,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (active) {
             setSession(nextSession);
             setError(null);
-            setStatus(nextSession ? "signed-in" : "signed-out");
+            setStatus(
+              nextSession
+                ? nextSession.user.email_confirmed_at
+                  ? "signed-in"
+                  : "email-unconfirmed"
+                : "signed-out",
+            );
           }
         });
         unsubscribe = () => subscription.unsubscribe();
@@ -62,7 +68,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           throw sessionError;
         }
         setSession(data.session);
-        setStatus(data.session ? "signed-in" : "signed-out");
+        setStatus(
+          data.session
+            ? data.session.user.email_confirmed_at
+              ? "signed-in"
+              : "email-unconfirmed"
+            : "signed-out",
+        );
       } catch (sessionError: unknown) {
         if (active && !receivedAuthEvent) {
           const errorKey = getAuthErrorKey(sessionError);

@@ -4,14 +4,14 @@ import { getSupabaseClient } from "../utils/supabase";
 
 export type ConversationPreview = {
   conversation: Conversation;
-  otherUser: Pick<Profile, "id" | "username" | "avatar_url">;
+  otherUser: Pick<Profile, "id" | "username" | "display_name" | "avatar_url">;
   lastMessage: Message | null;
   activityAt: string;
 };
 
 export type ConversationDetails = {
   conversation: Conversation;
-  otherUser: Pick<Profile, "id" | "username" | "avatar_url">;
+  otherUser: Pick<Profile, "id" | "username" | "display_name" | "avatar_url">;
 };
 
 export async function getChatClient(): Promise<SupabaseClient<Database>> {
@@ -76,7 +76,7 @@ export async function getConversationPreviews(
   const profileResult = otherParticipantIds.length
     ? await client
         .from("profiles")
-        .select("id, username, avatar_url")
+        .select("id, username, display_name, avatar_url")
         .in("id", otherParticipantIds)
     : { data: [], error: null };
   if (profileResult.error) throw profileResult.error;
@@ -148,7 +148,7 @@ export async function getConversationDetails(
 
   const profileResult = await client
     .from("profiles")
-    .select("id, username, avatar_url")
+    .select("id, username, display_name, avatar_url")
     .eq("id", otherUserId)
     .single();
   if (profileResult.error) throw profileResult.error;
@@ -176,11 +176,11 @@ export async function getConversationMessages(
 export async function findProfileByUsername(
   username: string,
   currentUserId: string,
-): Promise<Pick<Profile, "id" | "username" | "avatar_url"> | null> {
+): Promise<Pick<Profile, "id" | "username" | "display_name" | "avatar_url"> | null> {
   const client = await getChatClient();
   const result = await client
     .from("profiles")
-    .select("id, username, avatar_url")
+    .select("id, username, display_name, avatar_url")
     .eq("username", username.trim().toLowerCase())
     .neq("id", currentUserId)
     .maybeSingle();

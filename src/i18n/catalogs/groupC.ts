@@ -2,7 +2,7 @@ import type { MessageKey } from "../messages";
 
 export const groupC: Record<
   "vi" | "th" | "sv" | "nb" | "da" | "fi" | "el" | "ro" | "cs" | "sk",
-  Record<MessageKey, string>
+  Partial<Record<MessageKey, string>>
 > = {
   vi: {
     skipLink: "Chuyển đến nội dung",

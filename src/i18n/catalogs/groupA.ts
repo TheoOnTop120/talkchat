@@ -1816,11 +1816,11 @@ const catalogs = Object.fromEntries(
     locale,
     Object.fromEntries(
       rows.map(([key, ...translations]) => [key, translations[index]]),
-    ) as Record<MessageKey, string>,
+    ) as Partial<Record<MessageKey, string>>,
   ]),
-) as Record<string, Record<MessageKey, string>>;
+) as Record<string, Partial<Record<MessageKey, string>>>;
 
 export const groupA = catalogs as Record<
   "nl" | "de" | "es" | "pt" | "it" | "pl" | "uk" | "ru" | "tr" | "ar",
-  Record<MessageKey, string>
+  Partial<Record<MessageKey, string>>
 >;

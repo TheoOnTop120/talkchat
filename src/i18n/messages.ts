@@ -78,6 +78,8 @@ const baseMessages = {
     authRecoveryAccepted:
       "Si cette adresse correspond à un compte et si l’envoi e-mail est configuré, un lien de réinitialisation pourra être reçu.",
     authEmailVerified: "Votre adresse e-mail est confirmée.",
+    authEmailNotConfirmed:
+      "Confirmez votre adresse e-mail avant de vous connecter.",
     authAccountReady:
       "Votre compte est prêt. Vous pouvez commencer à utiliser TalkChat.",
     authVerifyPending:
@@ -91,6 +93,21 @@ const baseMessages = {
     authResetLinkRequired:
       "Aucun lien de réinitialisation valide n’est actif. Demandez un nouveau lien.",
     authResendEmail: "Adresse e-mail",
+    usernameLabel: "Nom d’utilisateur",
+    usernameHint:
+      "3 à 20 caractères : lettres, chiffres, points ou traits de soulignement.",
+    profileTitle: "Votre profil",
+    profileIntro: "Modifiez les informations visibles par vos contacts.",
+    profileSave: "Enregistrer le profil",
+    profileSaved: "Votre profil a été mis à jour.",
+    profileLoadError: "Votre profil n’a pas pu être chargé. Réessayez.",
+    profileSaveError: "Votre profil n’a pas pu être enregistré. Réessayez.",
+    avatarUrlLabel: "URL de la photo de profil",
+    errorUsernameInvalid:
+      "Le nom d’utilisateur doit contenir 3 à 20 lettres, chiffres, points ou traits de soulignement.",
+    errorUsernameReserved: "Ce nom d’utilisateur est réservé.",
+    errorUsernameTaken: "Ce nom d’utilisateur est déjà utilisé.",
+    errorAvatarUrl: "Saisissez une URL d’image commençant par http:// ou https://.",
     authResendConfirmation: "Renvoyer le lien de confirmation",
     authResendLoading: "Envoi de la demande…",
     authEmailLinkRequested:
@@ -106,7 +123,7 @@ const baseMessages = {
     displayNamePlaceholder: "Comment souhaitez-vous apparaître ?",
     birthDateLabel: "Date de naissance",
     birthDateHint:
-      "Utilisée uniquement pour vérifier l’âge minimum de 13 ans dans le navigateur ; elle n’est pas envoyée à Supabase.",
+      "Utilisée pour vérifier l’âge minimum de 13 ans et conservée séparément de votre profil public.",
     passwordConfirmLabel: "Confirmer le mot de passe",
     passwordConfirmPlaceholder: "Saisissez à nouveau votre mot de passe",
     passwordRulesTitle: "Votre mot de passe doit contenir :",
@@ -250,6 +267,8 @@ const baseMessages = {
     authRecoveryAccepted:
       "If this address matches an account and email delivery is configured, a password-reset link may arrive.",
     authEmailVerified: "Your email address is confirmed.",
+    authEmailNotConfirmed:
+      "Confirm your email address before signing in.",
     authAccountReady: "Your account is ready. You can start using TalkChat.",
     authVerifyPending:
       "Your request was accepted. If email confirmation is enabled, check your inbox. Delivery depends on the Supabase project's email configuration.",
@@ -262,6 +281,21 @@ const baseMessages = {
     authResetLinkRequired:
       "There is no active, valid password-reset link. Request a new link.",
     authResendEmail: "Email address",
+    usernameLabel: "Username",
+    usernameHint:
+      "3 to 20 characters: letters, numbers, periods, or underscores.",
+    profileTitle: "Your profile",
+    profileIntro: "Edit the information visible to your contacts.",
+    profileSave: "Save profile",
+    profileSaved: "Your profile has been updated.",
+    profileLoadError: "Your profile could not be loaded. Please try again.",
+    profileSaveError: "Your profile could not be saved. Please try again.",
+    avatarUrlLabel: "Profile photo URL",
+    errorUsernameInvalid:
+      "Username must be 3 to 20 letters, numbers, periods, or underscores.",
+    errorUsernameReserved: "This username is reserved.",
+    errorUsernameTaken: "This username is already taken.",
+    errorAvatarUrl: "Enter an image URL starting with http:// or https://.",
     authResendConfirmation: "Resend confirmation link",
     authResendLoading: "Sending request…",
     authEmailLinkRequested:
@@ -276,7 +310,7 @@ const baseMessages = {
     displayNamePlaceholder: "How would you like to appear?",
     birthDateLabel: "Date of birth",
     birthDateHint:
-      "Used only to check the minimum age of 13 in your browser; it is not sent to Supabase.",
+      "Used to check the minimum age of 13 and stored separately from your public profile.",
     passwordConfirmLabel: "Confirm password",
     passwordConfirmPlaceholder: "Enter your password again",
     passwordRulesTitle: "Your password must include:",
@@ -343,6 +377,7 @@ const baseMessages = {
 export type MessageKey = keyof (typeof baseMessages)["fr"];
 
 type MessageCatalog = Record<MessageKey, string>;
+type PartialMessageCatalog = Partial<MessageCatalog>;
 
 const loadedCatalogs = new Map<Locale, MessageCatalog>([
   ["fr", baseMessages.fr],
@@ -411,13 +446,13 @@ export async function loadMessageCatalog(locale: Locale): Promise<void> {
     throw new Error(`Missing base message catalog for locale "${locale}".`);
   }
 
-  const catalogs: Partial<Record<Locale, MessageCatalog>> =
+  const catalogs: Partial<Record<Locale, PartialMessageCatalog>> =
     await catalogLoaders[localeGroups[locale]]();
   const catalog = catalogs[locale];
   if (!catalog) {
     throw new Error(`Missing message catalog for locale "${locale}".`);
   }
-  loadedCatalogs.set(locale, catalog);
+  loadedCatalogs.set(locale, { ...baseMessages.en, ...catalog });
 }
 
 export function getMessageCatalog(locale: Locale): Readonly<MessageCatalog> {

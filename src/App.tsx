@@ -19,6 +19,7 @@ const ChatPage = lazy(() => import("./pages/ChatPage"));
 const LegalPage = lazy(() => import("./pages/LegalPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const ProblemPage = lazy(() => import("./pages/ProblemPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const RecoveryPage = lazy(() => import("./pages/RecoveryPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
@@ -124,6 +125,9 @@ function RoutedApp() {
       break;
     case "/verify-email":
       page = <VerificationPage {...pageProps} />;
+      break;
+    case "/profile":
+      page = <ProfilePage {...pageProps} />;
       break;
     case "/legal/terms":
       page = <LegalPage {...pageProps} documentId="terms" />;
